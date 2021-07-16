@@ -4,6 +4,8 @@ import './App.css';
 import Login from "../page/Login";
 import Header from "../components/Header";
 import Main from "../page/Main";
+import Signup from "../page/Signup";
+import PostWrite from "../page/PostWrite";
 
 
 
@@ -16,6 +18,9 @@ function App() {
       <Route path="/login" exact component={Login}/>
       <Route path="/header" exact component={Header}/>
       <Route path="/" exact component={Main}/>
+      <Route path="/signup" exact component={Signup}/>
+      <Route path="/write" exact component={PostWrite}/>
+
           </BrowserRouter>
       </React.Fragment>
   );
