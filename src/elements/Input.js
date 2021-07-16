@@ -38,7 +38,7 @@ Input.defaultProps = {
 
 const TextArea = styled.textarea`
     border: 1px solid #212121;
-  width: 100%;
+  width: 50%;
   padding: 12px 4px;
   box-sizing: border-box;
     `;
@@ -48,7 +48,7 @@ const Inputs = styled.input`
   width: 50%;
   padding : 12px 4px;
   box-sizing: border-box;
-  margin-left: 2%;
+
 
 `;
 
