@@ -2,7 +2,7 @@ import React from "react";
 import { Grid } from "../elements/index";
 
 import styled from "styled-components";
-import "semantic-ui-css/semantic.min.css";
+import "semantic-ui-css/semantic.min.css";g
 import { Pagination } from "semantic-ui-react";
 
 import Header from "../components/Header";
