@@ -3,24 +3,25 @@ import styled from "styled-components";
 import {Button, Grid, Input, Text} from "../elements"
 import TextField from "@material-ui/core/TextField";
 
-import Logo from "../components/Logo";
+import logo from "../logo.png"
 
 const PostWrite = () => {
 
     return(
         <React.Fragment>
-            <Logo/>
-            <Grid padding="100px">
+            <img src={logo} alt="Logo" style={{margin: "0px"}}/>
+            <Grid padding="50px">
                 <Container>
-                    <div><h2 style={{textAlign: 'left',
+                    <Title>
+                    <h2 style={{textAlign: 'left',
                         margin:'30px 0px 0px 0px',
                         padding: '30px'
                     }}
-                    >입양신청 등록</h2><Title>
-                        <p style={{margin:'30px'}}>"모든 생명은 보호받고 존중받을 권리가 있습니다"<br/>
-                            동물자유연대는 사람과 동물이 생태적,윤리적 조화를 이루며 살아<br/>
-                            가는 세상을 만들기 위해 다방면에서 활동을 펼쳐가고 있습니다.</p>
-                    </Title></div>
+                    >입양신청 등록</h2><p style={{marginLeft:'34px', fontSize:'1.2em'}}>"모든 생명은 보호받고 존중받을 권리가 있습니다"<br/>
+                    동물자유연대는 사람과 동물이 생태적,윤리적 조화를 이루며 살아<br/>
+                    가는 세상을 만들기 위해 다방면에서 활동을 펼쳐가고 있습니다.</p>
+
+                    </Title>
 
                 </Container>
                 <AddBox>
@@ -54,26 +55,24 @@ const PostWrite = () => {
 }
 
 const Bigbox = styled.div `
-width: 50%;
-  height: 350px;
+width: 70%;
+  height: 25vw;
   background-color: antiquewhite;
   margin: auto;
 `;
-const Main = styled.div`
-    text-align: center;
-    `;
+
 
 const Container = styled.div`
-  height: 16vw;
+  height: 15vw;
   width: 55vw;
 margin: auto;
-    background-color: #f36f21;
+    background-color: #67BFB2;
   color: white;
 
 `;
 
 const Title = styled.div`
-font-size: 15px;
+font-size: 1em;
   color: #ffffff;
   text-align: left;
 `;
@@ -81,7 +80,7 @@ font-size: 15px;
 const AddBox = styled.div`
 width: 55vw;
   height: 200vh;
-  border: 1px solid black;
+  border: 1px solid #61dafb;
   margin: auto;
   
 `;
@@ -96,7 +95,7 @@ const Line = styled.div`
   margin-top: 3vw;
   width: 55vw;
   height: 5px;
-  background-color: #f36f21;
+  background-color: #67BFB2;
   margin-bottom: 3vw;
 `;
 export default PostWrite;

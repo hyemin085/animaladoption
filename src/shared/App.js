@@ -9,12 +9,15 @@ import PostWrite from "../page/PostWrite";
 
 
 
+
 import {BrowserRouter, Route} from "react-router-dom";
 
 function App() {
   return (
       <React.Fragment>
+
         <BrowserRouter>
+
       <Route path="/login" exact component={Login}/>
       <Route path="/header" exact component={Header}/>
       <Route path="/" exact component={Main}/>

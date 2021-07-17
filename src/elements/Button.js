@@ -29,7 +29,7 @@ const BasicButton = styled.button`
   width: 20%;
   height: 50px;
   border-radius: 20px;
-  background-color: #E26C31;
+  background-color: #67BFB2;
   color: #ffffff;
   padding: ${(props) => props.padding};
   box-sizing: border-box;

@@ -2,33 +2,28 @@ import React from "react";
 import styled from "styled-components";
 import {Text, Input, Grid, Button} from "../elements"
 
-import Logo from "../components/Logo";
+import logo from "../logo.png"
 
 const Signup = () => {
 
 
     return (
         <React.Fragment>
-            <Logo/>
-            <Main>
-
-
-                <Grid padding="100px 0px">
-
-
-
-                    <Container>
-                        <div><h2 style={{textAlign: 'left',
+            <img src={logo} alt="Logo" style={{margin: "0px"}}/>
+            <Grid padding="50px">
+                <Container>
+                    <Title>
+                        <h2 style={{textAlign: 'left',
                             margin:'30px 0px 0px 0px',
                             padding: '30px'
                         }}
-                        >회원가입</h2><Title>
-                            <p style={{margin:'30px'}}>"모든 생명은 보호받고 존중받을 권리가 있습니다"<br/>
-                                동물자유연대는 사람과 동물이 생태적,윤리적 조화를 이루며 살아<br/>
-                                가는 세상을 만들기 위해 다방면에서 활동을 펼쳐가고 있습니다.</p>
-                        </Title></div>
+                        >회원가입</h2><p style={{marginLeft:'34px', fontSize:'1.2em'}}>"모든 생명은 보호받고 존중받을 권리가 있습니다"<br/>
+                        동물자유연대는 사람과 동물이 생태적,윤리적 조화를 이루며 살아<br/>
+                        가는 세상을 만들기 위해 다방면에서 활동을 펼쳐가고 있습니다.</p>
 
-                    </Container>
+                    </Title>
+
+                </Container>
 
                    <SignBox>
                        <Line/>
@@ -70,11 +65,6 @@ const Signup = () => {
                     {/*/>*/}
                 </Grid>
 
-            </Main>
-
-
-
-
         </React.Fragment>
 
     )
@@ -87,34 +77,35 @@ const Main = styled.div`
     `;
 
 const Container = styled.div`
-  height: 16vw;
+  height: 15vw;
   width: 55vw;
-margin: auto;
-    background-color: #f36f21;
+  margin: auto;
+  background-color: #67BFB2;
   color: white;
 
 `;
 
 const Title = styled.div`
-font-size: 15px;
+  font-size: 1em;
   color: #ffffff;
   text-align: left;
 `;
 
 const SignBox = styled.div`
-width: 55vw;
-  height: 100vh;
+  width: 55vw;
+  height: 200vh;
   border: 1px solid black;
   margin: auto;
 `;
 
 const InputBox = styled. div`
-    
+  text-align: center; 
     `;
 
 const Line = styled.div`
   margin-top: 3vw;
   width: 55vw;
   height: 5px;
-  background-color: #f36f21;
+  background-color: #67BFB2;
+  margin-bottom: 3vw;
 `;

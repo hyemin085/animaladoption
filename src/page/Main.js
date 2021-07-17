@@ -5,90 +5,87 @@ import styled from "styled-components";
 import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
 
+import Header from "../components/Header";
+import Card from "../components/Card"
+
 const Main = () => {
   const PaginationExampleCompact = () => (
-    <Pagination
-      boundaryRange={0}
-      defaultActivePage={1}
-      ellipsisItem={null}
-      firstItem={null}
-      lastItem={null}
-      siblingRange={5}
-      totalPages={5}
-    />
+      <Pagination
+          boundaryRange={0}
+          defaultActivePage={1}
+          ellipsisItem={null}
+          firstItem={null}
+          lastItem={null}
+          siblingRange={5}
+          totalPages={5}
+      />
   );
 
   return (
-    <>
-      <Grid margin="2em 25em 0 10em">
-        <h1>입양하기</h1>
+      <>
+        <Header/>
+        <Grid margin="2em 30em 0 10em">
+          <div style={{border: "2px solid #699B97", width: "29px", marginBottom: "-20px"}}></div>
+          <h1>입양하기</h1>
 
-        <NoticeBox>
+          <NoticeBox>
+            <YoutubeBox>유튜브</YoutubeBox>
+            <PhotoBox>공지 사진</PhotoBox>
+          </NoticeBox>
 
-        </NoticeBox>
+          <CardBox>
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
 
-        <CardBox>
-          <YoutubeBox>유튜브</YoutubeBox>
-          <PhotoBox>공지 사진</PhotoBox>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
-        </CardBox>
+          </CardBox>
 
-        <PaginationContainer>
-          <PaginationExampleCompact />
-        </PaginationContainer>
-      </Grid>
-    </>
+          <PaginationContainer>
+            <PaginationExampleCompact />
+          </PaginationContainer>
+        </Grid>
+      </>
   );
 };
 
 export default Main;
 
 const NoticeBox = styled.div`
-  width: 100vw;
-  height: 15vh;
- 
+  width: 150vh;
+  height: 30vh;
   display: flex;
   margin: 2em auto;
   box-sizing: border-box;
-  
 `;
 
 const YoutubeBox = styled.div`
-  width: 64.7vh;
-  height: 15em;
-  background-color: #c4c4c4;
-  box-sizing: border-box;
+  width: 50%;
+  height: 30vh;
+  background-color: #67BFB2;
 `;
 
 const PhotoBox = styled.div`
-  width: 65vh;
-  height: 15em;
+  width: 50%;
+  height: 30vh;
   background-color: #e6e8e4;
-
-  box-sizing: border-box;
 `;
 
 const CardBox = styled.div`
+  width: 150vh;
+  height: auto;
   border: 1px solid black;
   box-sizing: border-box;
-  width: 130vh;
-  height: auto;
-  display: flex;
-  box-sizing: border-box;
-
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4vh;
 `;
 
-const Card = styled.div`
-  width: 50px;
-  margin: 1vh;
-  height: 20vh;
+const Card1 = styled.div`
+  height: 30vh;
   background-color: #e5cbbc;
-  flex: 0 0 25%;
-  border: 1px solid black;
   box-sizing: border-box;
 `;
 
@@ -98,4 +95,5 @@ const PaginationContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: auto;
 `;
