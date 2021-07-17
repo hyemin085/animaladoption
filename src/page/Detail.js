@@ -37,4 +37,6 @@ const Detail = () => {
   );
 };
 
+const Line = styled.
+
 export default Detail;

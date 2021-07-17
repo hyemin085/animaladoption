@@ -6,48 +6,53 @@ import "semantic-ui-css/semantic.min.css";
 import { Pagination } from "semantic-ui-react";
 
 import Header from "../components/Header";
-import Card from "../components/Card"
+import Card from "../components/Card";
 
 const Main = () => {
   const PaginationExampleCompact = () => (
-      <Pagination
-          boundaryRange={0}
-          defaultActivePage={1}
-          ellipsisItem={null}
-          firstItem={null}
-          lastItem={null}
-          siblingRange={5}
-          totalPages={5}
-      />
+    <Pagination
+      boundaryRange={0}
+      defaultActivePage={1}
+      ellipsisItem={null}
+      firstItem={null}
+      lastItem={null}
+      siblingRange={5}
+      totalPages={5}
+    />
   );
 
   return (
-      <>
-        <Header/>
-        <Grid margin="2em 30em 0 10em">
-          <div style={{border: "2px solid #699B97", width: "29px", marginBottom: "-20px"}}></div>
-          <h1>입양하기</h1>
+    <>
+      <Header />
+      <Grid margin="2em 30em 0 10em">
+        <div
+          style={{
+            border: "2px solid #699B97",
+            width: "29px",
+            marginBottom: "-20px",
+          }}
+        ></div>
+        <h1>입양하기</h1>
 
-          <NoticeBox>
-            <YoutubeBox>유튜브</YoutubeBox>
-            <PhotoBox>공지 사진</PhotoBox>
-          </NoticeBox>
+        <NoticeBox>
+          <YoutubeBox>유튜브</YoutubeBox>
+          <PhotoBox>공지 사진</PhotoBox>
+        </NoticeBox>
 
-          <CardBox>
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+        <CardBox>
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+        </CardBox>
 
-          </CardBox>
-
-          <PaginationContainer>
-            <PaginationExampleCompact />
-          </PaginationContainer>
-        </Grid>
-      </>
+        <PaginationContainer>
+          <PaginationExampleCompact />
+        </PaginationContainer>
+      </Grid>
+    </>
   );
 };
 
@@ -64,7 +69,7 @@ const NoticeBox = styled.div`
 const YoutubeBox = styled.div`
   width: 50%;
   height: 30vh;
-  background-color: #67BFB2;
+  background-color: #67bfb2;
 `;
 
 const PhotoBox = styled.div`
@@ -83,11 +88,11 @@ const CardBox = styled.div`
   gap: 4vh;
 `;
 
-const Card1 = styled.div`
-  height: 30vh;
-  background-color: #e5cbbc;
-  box-sizing: border-box;
-`;
+// const Card1 = styled.div`
+//   height: 30vh;
+//   background-color: #e5cbbc;
+//   box-sizing: border-box;
+// `;
 
 const PaginationContainer = styled.div`
   width: 100%;
