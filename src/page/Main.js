@@ -20,20 +20,21 @@ const Main = () => {
 
   return (
     <>
-      <Grid margin="2em 25em 0 10em">
+      <Grid margin="2em 30em 0 10em">
         <h1>입양하기</h1>
 
         <NoticeBox>
-
+          <YoutubeBox>유튜브</YoutubeBox>
+          <PhotoBox>공지 사진</PhotoBox>
         </NoticeBox>
 
         <CardBox>
-          <YoutubeBox>유튜브</YoutubeBox>
-          <PhotoBox>공지 사진</PhotoBox>
-          <Card/>
-          <Card/>
-          <Card/>
-          <Card/>
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
+          <Card />
         </CardBox>
 
         <PaginationContainer>
@@ -47,48 +48,38 @@ const Main = () => {
 export default Main;
 
 const NoticeBox = styled.div`
-  width: 100vw;
-  height: 15vh;
- 
+  width: 100%;
+  height: 30vh;
   display: flex;
   margin: 2em auto;
   box-sizing: border-box;
-  
 `;
 
 const YoutubeBox = styled.div`
-  width: 64.7vh;
-  height: 15em;
+  width: 50%;
+  height: 30vh;
   background-color: #c4c4c4;
-  box-sizing: border-box;
 `;
 
 const PhotoBox = styled.div`
-  width: 65vh;
-  height: 15em;
+  width: 50%;
+  height: 30vh;
   background-color: #e6e8e4;
-
-  box-sizing: border-box;
 `;
 
 const CardBox = styled.div`
+  width: 100%;
+  height: auto;
   border: 1px solid black;
   box-sizing: border-box;
-  width: 130vh;
-  height: auto;
-  display: flex;
-  box-sizing: border-box;
-
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4vh;
 `;
 
 const Card = styled.div`
-  width: 50px;
-  margin: 1vh;
-  height: 20vh;
+  height: 30vh;
   background-color: #e5cbbc;
-  flex: 0 0 25%;
-  border: 1px solid black;
   box-sizing: border-box;
 `;
 
