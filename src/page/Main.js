@@ -14,7 +14,7 @@ const Main = () => {
       firstItem={null}
       lastItem={null}
       siblingRange={5}
-      totalPages={10}
+      totalPages={5}
     />
   );
 
@@ -24,19 +24,16 @@ const Main = () => {
         <h1>입양하기</h1>
 
         <NoticeBox>
-          <YoutubeBox>유튜브</YoutubeBox>
-          <PhotoBox>공지 사진</PhotoBox>
+
         </NoticeBox>
 
         <CardBox>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
-          <Card></Card>
+          <YoutubeBox>유튜브</YoutubeBox>
+          <PhotoBox>공지 사진</PhotoBox>
+          <Card/>
+          <Card/>
+          <Card/>
+          <Card/>
         </CardBox>
 
         <PaginationContainer>
@@ -50,44 +47,49 @@ const Main = () => {
 export default Main;
 
 const NoticeBox = styled.div`
-  width: 100%;
-  height: 15em;
-  background-color: #cecbce;
+  width: 100vw;
+  height: 15vh;
+ 
   display: flex;
   margin: 2em auto;
+  box-sizing: border-box;
+  
 `;
 
 const YoutubeBox = styled.div`
-  width: 50%;
+  width: 64.7vh;
   height: 15em;
   background-color: #c4c4c4;
+  box-sizing: border-box;
 `;
 
 const PhotoBox = styled.div`
-  width: 50%;
+  width: 65vh;
   height: 15em;
   background-color: #e6e8e4;
+
+  box-sizing: border-box;
 `;
 
 const CardBox = styled.div`
   border: 1px solid black;
   box-sizing: border-box;
-  width: 100%;
+  width: 130vh;
   height: auto;
   display: flex;
-  margin: auto;
-  margin-top: 4em;
-  justify-content: center;
+  box-sizing: border-box;
+
   flex-wrap: wrap;
 `;
 
 const Card = styled.div`
-  width: 10%;
-  height: 14em;
+  width: 50px;
+  margin: 1vh;
+  height: 20vh;
   background-color: #e5cbbc;
   flex: 0 0 25%;
-  margin: 0 1em;
-  border: 1px solid red;
+  border: 1px solid black;
+  box-sizing: border-box;
 `;
 
 const PaginationContainer = styled.div`

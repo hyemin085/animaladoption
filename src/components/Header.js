@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { Grid, Text, Button } from "../elements";
 
+import Logo from "./Logo";
 
 const Header = () => {
 
@@ -11,7 +12,7 @@ const Header = () => {
             <Grid is_flex padding="4px 16px">
                 <Grid>
                     <Text margin="0px" size="24px" bold>
-                        동물자유연대 소개 활동 참여 자료 후원 온센터 <OnButton>ON&ON</OnButton>
+                        <Logo/> 소개 활동 참여 자료 후원 온센터 <OnButton>ON&ON</OnButton>
                     </Text>
                     
                <Line/>
