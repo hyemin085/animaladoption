@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import {Text, Input, Grid, Button} from "../elements"
+import Header from "../components/Header";
 
 const Login = () => {
 
 
     return (
        <React.Fragment>
+       <Header/>
            <Main>
            <Grid padding="5px 0px">
 

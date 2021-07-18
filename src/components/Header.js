@@ -39,8 +39,8 @@ export default Header;
 const Line = styled.hr`
     border: none;
   border: 1px solid #699B97;
-  width: 200vh;
-  margin-top: 5vw;
+  width: 100%;
+  margin-top: 80px;
 `;
 
 const OnButton = styled.button`

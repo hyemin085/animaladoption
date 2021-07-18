@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: 400
+        maxWidth: "100%"
     }
 });
 
@@ -23,7 +23,7 @@ export default function ImgMediaCard() {
                 <CardMedia
                     component="img"
                     alt="Contemplative Reptile"
-                    height="180"
+                    height="200vh"
                     img src="http://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg"
                     title="Contemplative Reptile"
                 />
