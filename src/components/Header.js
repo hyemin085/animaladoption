@@ -42,6 +42,13 @@ const Header = (props) => {
                 <Menu style={{ border: "none" }}>
                   <OnButton
                     onClick={() => {
+                      history.push("/write");
+                    }}
+                  >
+                    포스팅하기
+                  </OnButton>
+                  <OnButton
+                    onClick={() => {
                       dispatch(useActions.logOutDB());
                     }}
                     style={{ marginTop: "-20px" }}

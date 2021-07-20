@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
@@ -11,9 +11,24 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
-  const post_list = useSelector((state) => state.post.list);
+  const post_id = props.history.location.pathname.split("/detail/")[1];
+  console.log(post_id);
 
-  const id = props.match.params.animalId;
+  useEffect(() => {
+    dispatch(postActions.detailPostDB(post_id));
+  }, []);
+
+  const deletePost = (post_id) => {
+    dispatch(postActions.deletePost(post_id));
+    props.history.push("/");
+  };
+
+  const post = useSelector((state) => state.post.post);
+  console.log(post);
+
+  if (!post) {
+    return <></>;
+  }
 
   return (
     <>
@@ -31,21 +46,34 @@ const Detail = (props) => {
           <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
         </TitleBox>
 
-        <h3>{props.title}</h3>
-        <div>post[0].nickname</div>
+        <h3>{post.title}</h3>
+        <div>post.nickname</div>
         <Line />
         <ContentBox>
-          <PhotoBox />
+          <PhotoBox style={{ backgroundImage: `url(${post.animalPhoto})` }} />
           <DescBox>
-            <p>이름: post[0].animalName</p>
-            <p>종: post[0].animalSpecies</p>
-            <p>성별: post[0].animalGender</p>
-            <p>나이: post[0].animalAge</p>
-            <p>이야기: </p>
+            <p>이름: {post.animalName}</p>
+            <p>종: {post.animalSpecies}</p>
+            <p>종류: {post.animalBreed}</p>
+            <p>성별: {post.animalGender}</p>
+            <p>나이: {post.animalAge}</p>
           </DescBox>
-          <StoryBox>post[0].animalStory</StoryBox>
+          <StoryBox>{post.animalStory}</StoryBox>
           <ButtonBox>
             <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
+            <ApplyButton
+              onClick={() => {
+                props.history.push(`/edit/${post_id}`);
+              }}
+            >
+              게시글 수정
+            </ApplyButton>
+            <ApplyButton
+              style={{ backgroundColor: "#E97879" }}
+              onClick={deletePost}
+            >
+              게시글 삭제
+            </ApplyButton>
           </ButtonBox>
         </ContentBox>
 
@@ -145,6 +173,7 @@ const Title = styled.h1`
 const ApplyButton = styled.button`
   height: 6vh;
   padding: 0 1.5vw;
+  margin: 0 3vw;
   background-color: #66beb2;
   color: white;
   font-size: 15px;
@@ -169,7 +198,6 @@ const PhotoBox = styled.div`
   width: 40vw;
   height: 50vh;
   margin: 0 auto;
-  background-image: url("https://elaineimages.s3.ap-northeast-2.amazonaws.com/474px-Joaqu%C3%ADn_Sorolla_y_Bastida_-_Strolling_along_the_Seashore_-_Google_Art_Project.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

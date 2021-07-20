@@ -15,10 +15,11 @@ import logo from "../logo.png";
 
 const Main = (props) => {
   const dispatch = useDispatch();
+  const card_list = useSelector((state) => state.post.list);
 
   React.useEffect(() => {
     dispatch(postActions.setPostDB());
-  });
+  }, []);
 
   const PaginationExampleCompact = () => (
     <Pagination

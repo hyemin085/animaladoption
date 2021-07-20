@@ -6,14 +6,13 @@ import axios from "axios";
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
-const GET_POST = "GET_POST";
 const DELETE_POST = "DELETE_POST";
+const DETAIL_POST = "DETAIL_POST";
 
 //Action creators
-// 인자로 들어가는값, 뱉어지는 값의 변수들도 중요! 이 변수로 action에 전달되는겨
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
-const getPost = createAction(GET_POST, (post) => ({ post }));
+const detailPost = createAction(DETAIL_POST, (post) => ({ post }));
 const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post_id,
   post,
@@ -43,6 +42,25 @@ const setPostDB = () => {
       .get("http://3.36.119.207/api/animals")
       .then((res) => {
         dispatch(setPost(res.data.result));
+        // console.log(res.data.result);
+      })
+      .catch((err) => {
+        // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+        console.log("getPost도중 에러 발생");
+      });
+  };
+};
+
+const detailPostDB = (animalID) => {
+  return function (dispatch, getState, { history }) {
+    const headers = {
+      authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    };
+    axios
+      .get(`http://3.36.119.207/api/animals/${animalID}`, { headers: headers })
+      .then((res) => {
+        dispatch(detailPost(res.data.result));
+        console.log(res.data.result);
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -69,19 +87,36 @@ const addPostDB = (post) => {
   };
 };
 
-const detailPostDB = (id) => {
+const editPostDB = (post_id, post) => {
   return function (dispatch, getState, { history }) {
-    axios({
-      method: "GET",
-      url: `http://3.36.119.207/api/animals/${id}`,
-    }).then((doc) => {
-      console.log(doc);
-      if (!doc.data) {
-        return;
-      }
-      const post = doc.data;
-      dispatch(getPost(post));
-    });
+    // const headers = {
+    //   authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    // };
+    axios
+      .put(`http://3.36.119.207/api/animals/${post_id}`, post)
+      .then((res) => {
+        dispatch(editPost(res.data.result));
+        history.replace("/");
+      })
+      .catch((err) => {
+        // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+        console.log("editPost도중 에러 발생");
+      });
+  };
+};
+
+const deletePostDB = (post_id) => {
+  return function (dispatch, getState, { history }) {
+    axios
+      .delete(`http://3.36.119.207/api/animals/${post_id}`)
+      .then((res) => {
+        dispatch(deletePost(post_id));
+        history.push("/");
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log("deletePost도중 에러 발생");
+      });
   };
 };
 
@@ -93,15 +128,15 @@ export default handleActions(
       return produce(state, (draft) => {
         // draft.list.push(...action.payload.post_list);
         draft.list = action.payload.post_list;
-        // ^ 여기서 draft는 아마도 post.js의 state(?)
       });
     },
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list.unshift(action.payload.post);
       }),
-    [GET_POST]: (state, action) =>
+    [DETAIL_POST]: (state, action) =>
       produce(state, (draft) => {
+        // console.log(action.payload.post)
         draft.post = action.payload.post;
       }),
     [EDIT_POST]: (state, action) =>
@@ -109,7 +144,15 @@ export default handleActions(
         draft.post = action.payload.post;
       }),
     [DELETE_POST]: (state, action) => {
-      produce(state, (draft) => {});
+      produce(state, (draft) => {
+        let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
+        console.log(idx);
+
+        if (idx !== -1) {
+          // 배열에서 idx 위치의 요소 1개를 지웁니다.
+          draft.list.splice(idx, 1);
+        }
+      });
     },
   },
   initialState
@@ -119,11 +162,13 @@ export default handleActions(
 const actionCreators = {
   setPost,
   addPost,
-  getPost,
   editPost,
+  editPostDB,
   setPostDB,
   addPostDB,
   detailPostDB,
+  deletePost,
+  deletePostDB,
 };
 
 export { actionCreators };

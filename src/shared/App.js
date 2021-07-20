@@ -9,6 +9,7 @@ import Main from "../page/Main";
 import Signup from "../page/Signup";
 import PostWrite from "../page/PostWrite";
 import Detail from "../page/Detail";
+import PostEdit from "../page/PostEdit";
 
 import { Route } from "react-router-dom";
 
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" exact component={Signup} />
         <Route path="/write" exact component={PostWrite} />
         <Route path="/detail/:id" exact component={Detail} />
+        <Route path="/edit/:id" exact component={PostEdit} />
       </ConnectedRouter>
     </React.Fragment>
   );

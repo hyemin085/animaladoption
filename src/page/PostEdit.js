@@ -6,7 +6,7 @@ import { Button, Grid, Input, Text } from "../elements";
 
 import logo from "../logo.png";
 
-const PostWrite = (props) => {
+const PostEdit = (props) => {
   const dispatch = useDispatch();
   const title = React.useRef();
   const animalName = React.useRef();
@@ -15,8 +15,11 @@ const PostWrite = (props) => {
   const animalGender = React.useRef();
   const animalAge = React.useRef();
   const animalStory = React.useRef();
+  // 작성자와 같은 유저인지 확인
 
-  const addPost = () => {
+  const editPost = () => {
+    const post_id = parseInt(props.match.params.id);
+    console.log(post_id);
     let post = {
       title: title.current.value,
       animalName: animalName.current.value,
@@ -26,10 +29,10 @@ const PostWrite = (props) => {
       animalAge: animalAge.current.value,
       animalStory: animalStory.current.value,
       animalPhoto:
-        "https://elaineimages.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20210702_191310693.jpg",
+        "https://elaineimages.s3.ap-northeast-2.amazonaws.com/Alexander_Averin_07.jpg",
     };
-    dispatch(postActions.addPostDB(post));
-    console.log(post);
+    dispatch(postActions.editPostDB(post_id, post));
+    console.log(post_id, post);
     props.history.push("/");
   };
   return (
@@ -75,7 +78,7 @@ const PostWrite = (props) => {
               ref={animalStory}
             />
             <Grid padding="20px 0px">
-              <Button text="게시글 작성" _onClick={addPost} />
+              <Button text="게시글 수정" _onClick={editPost} />
             </Grid>
           </InputBox>
         </AddBox>
@@ -126,4 +129,4 @@ const Line = styled.div`
   margin-bottom: 3vw;
 `;
 
-export default PostWrite;
+export default PostEdit;

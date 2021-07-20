@@ -12,18 +12,17 @@ const Card = (props) => {
   const dispatch = useDispatch();
 
   const card_list = useSelector((state) => state.post.list);
-  console.log(card_list);
-  const id = props.animalId;
-
-  const goDetail = () => {
-    history.push(`/detail/${id}`);
-  };
 
   return (
     <React.Fragment>
       {card_list.map((card, idx) => {
         return (
-          <Box key={card.animalId} onClick={goDetail}>
+          <Box
+            key={card.animalId}
+            onClick={() => {
+              history.push(`/detail/${card.animalId}`);
+            }}
+          >
             <div>
               <Img src={card.animalPhoto} style={{ marginLeft: "0.8em" }} />
             </div>
