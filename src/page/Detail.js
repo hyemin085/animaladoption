@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
@@ -10,12 +10,10 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 
 const Detail = (props) => {
-  // const dispatch = useDispatch();
-  // const post = useSelector((state) => state.post.list);
+  const dispatch = useDispatch();
+  const post_list = useSelector((state) => state.post.list);
 
-  // useEffect(() => {
-  //   dispatch(postActions.setPostDB());
-  // }, [dispatch]);
+  const id = props.match.params.animalId;
 
   return (
     <>
@@ -33,7 +31,7 @@ const Detail = (props) => {
           <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
         </TitleBox>
 
-        <h3>post[0].title</h3>
+        <h3>{props.title}</h3>
         <div>post[0].nickname</div>
         <Line />
         <ContentBox>

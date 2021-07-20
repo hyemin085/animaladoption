@@ -10,6 +10,7 @@ const GET_POST = "GET_POST";
 const DELETE_POST = "DELETE_POST";
 
 //Action creators
+// 인자로 들어가는값, 뱉어지는 값의 변수들도 중요! 이 변수로 action에 전달되는겨
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const getPost = createAction(GET_POST, (post) => ({ post }));
@@ -18,12 +19,6 @@ const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
-
-// 리듀서가 사용할 initialState
-const initialState = {
-  list: [],
-  post: [],
-};
 
 // 게시글 하나에 기본적으로 들어갈 내용
 const initialPost = {
@@ -37,13 +32,17 @@ const initialPost = {
   animalPhoto: "initial animalPhoto",
 };
 
+// 리듀서가 사용할 initialState
+const initialState = {
+  list: [],
+};
+
 const setPostDB = () => {
   return function (dispatch, getState, { history }) {
     axios
       .get("http://3.36.119.207/api/animals")
       .then((res) => {
         dispatch(setPost(res.data.result));
-        console.log(res.data.result);
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -74,7 +73,7 @@ const detailPostDB = (id) => {
   return function (dispatch, getState, { history }) {
     axios({
       method: "GET",
-      url: "http://3.36.119.207/api/animals/:animalId",
+      url: `http://3.36.119.207/api/animals/${id}`,
     }).then((doc) => {
       console.log(doc);
       if (!doc.data) {
@@ -92,7 +91,9 @@ export default handleActions(
   {
     [SET_POST]: (state, action) => {
       return produce(state, (draft) => {
-        draft.list.push(...action.payload.post_list);
+        // draft.list.push(...action.payload.post_list);
+        draft.list = action.payload.post_list;
+        // ^ 여기서 draft는 아마도 post.js의 state(?)
       });
     },
     [ADD_POST]: (state, action) =>

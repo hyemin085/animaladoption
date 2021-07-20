@@ -15,7 +15,6 @@ import logo from "../logo.png";
 
 const Main = (props) => {
   const dispatch = useDispatch();
-  const post_list = useSelector((state) => state.post_list);
 
   React.useEffect(() => {
     dispatch(postActions.setPostDB());
