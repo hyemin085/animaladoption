@@ -8,10 +8,10 @@ const ADD_POST = "ADD_POST";
 const EDIT_POST = "EDIT_POST";
 const GET_POST = "GET_POST";
 const DELETE_POST = "DELETE_POST";
-const DETAIL_POST = "DETAIL_POST";
-
+const DETAIL_POST = "DETAIL_POST"
 
 //Action creators
+// 인자로 들어가는값, 뱉어지는 값의 변수들도 중요! 이 변수로 action에 전달되는겨
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
 const getPost = createAction(GET_POST, (post) => ({ post }));
@@ -45,26 +45,6 @@ const setPostDB = () => {
             .get("http://3.36.119.207/api/animals")
             .then((res) => {
                 dispatch(setPost(res.data.result));
-                // console.log(res.data.result);
-            })
-            .catch((err) => {
-                // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
-                console.log("getPost도중 에러 발생");
-            });
-    };
-};
-
-const detailPostDB = (animalID) => {
-    return function (dispatch, getState, {history}) {
-        const headers = {
-            authorization: `Bearer ${sessionStorage.getItem("token")}`
-        }
-        axios
-            .get(`http://3.36.119.207/api/animals/${animalID}`,
-                {headers: headers})
-            .then((res) => {
-               dispatch(detailPost(res.data.result));
-                console.log(res.data.result);
             })
             .catch((err) => {
                 // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -91,6 +71,24 @@ const addPostDB = (post) => {
     };
 };
 
+const detailPostDB = (animalID) => {
+    return function (dispatch, getState, {history}) {
+        const headers = {
+            authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }
+        axios
+            .get(`http://3.36.119.207/api/animals/${animalID}`,
+                {headers: headers})
+            .then((res) => {
+                dispatch(detailPost(res.data.result));
+                console.log(res.data.result);
+            })
+            .catch((err) => {
+                // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+                console.log("getPost도중 에러 발생");
+            });
+    };
+};
 
 //Reducer
 
@@ -100,6 +98,7 @@ export default handleActions(
             return produce(state, (draft) => {
                 // draft.list.push(...action.payload.post_list);
                 draft.list = action.payload.post_list;
+                // ^ 여기서 draft는 아마도 post.js의 state(?)
             });
         },
         [ADD_POST]: (state, action) =>
@@ -110,16 +109,15 @@ export default handleActions(
             produce(state, (draft) => {
                 draft.post = action.payload.post;
             }),
+        [EDIT_POST]: (state, action) =>
+            produce(state, (draft) => {
+                draft.post = action.payload.post;
+            }),
         [DETAIL_POST]: (state, action) =>
             produce(state, (draft) => {
                 // console.log(action.payload.post)
                 draft.post = action.payload.post;
             }),
-        [EDIT_POST]: (state, action) =>
-            produce(state, (draft) => {
-                draft.post = action.payload.post;
-            }),
-
         [DELETE_POST]: (state, action) => {
             produce(state, (draft) => {});
         },

@@ -109,6 +109,30 @@ const signupAPI = (username, password, passwordChecker, emailAddress) => {
 
     };
 };
+const detailPost = createAction(DETAIL_POST, (post)=> ({post}));
+const detailPostDB = (animalID) => {
+    return function (dispatch, getState, {history}) {
+        const headers = {
+            authorization: `Bearer ${sessionStorage.getItem("token")}`
+        }
+        axios
+            .get(`http://3.36.119.207/api/animals/${animalID}`,
+                {headers: headers})
+            .then((res) => {
+                dispatch(detailPost(res.data.result));
+                console.log(res.data.result);
+            })
+            .catch((err) => {
+                // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+                console.log("getPost도중 에러 발생");
+            });
+    };
+};
+
+
+
+
+
 
 
 //Reducer
