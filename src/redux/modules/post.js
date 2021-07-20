@@ -1,114 +1,159 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import { firestore } from "../../firebase";
 import axios from "axios";
 
-// actions
+//actions
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const EDIT_POST = "EDIT_POST";
+const GET_POST = "GET_POST";
+const DELETE_POST = "DELETE_POST";
 
-// createAction(Action Creators 더 쉽게 만들기)
+//Action creators
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
+const getPost = createAction(GET_POST, (post) => ({ post }));
+const editPost = createAction(EDIT_POST, (post_id, post) => ({
+  post_id,
+  post,
+}));
+const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
+// 수정할때 필요한것이 어떤것을 수정할 것인지(post_id) 와 수정할 내용(post)가 필요하기에 두개써줌
 
-// 리듀서가 사용할 initialState
 const initialState = {
-  list: [
-    {
-      ok: true,
-      result: {
-        userId: 5,
-        animalId: 3,
-        title: "이것은 제목....",
-        animalName: "멍멍이",
-        animalSpecies: "개",
-        animalGender: "수컷",
-        animalAge: "3",
-        animalStory: "이 강아지로 말하자면.....",
-        animalPhoto: "사진",
-      },
-    },
-  ],
+  list: [],
+  post: [],
+};
+const initialPost = {
+  title: "이것은 제목....",
+  animalName: "김춘배",
+  animalSpecies: "개",
+  animalBreed: "도베르만",
+  animalGender: "수컷",
+  animalAge: 5,
+  animalStory: "이 강아지로 말하자면.....",
+  animalPhoto: "사진",
 };
 
-const post_db = firestore.collection("animals");
+const getPostDB = () => {
+  return function (dispatch, getState, { history }) {
+    let post_list = [];
+    axios({
+      method: "GET",
+      url: "http://3.36.119.207/api/animals/:animalId",
+      // headers: {
+      //     "Accept": "application/json", //클라이언트가 서버한테 요청하는(원하는) 타입
+      //     "Content-Type":"application/json;charset=UTF-8", //현재 서버한테 보내는 데이터 타입
+      //     'Access-Control-Allow-Origin' : '*'
+      // },
+    }).then((docs) => {
+      const post_list = docs.data;
+      dispatch(setPost(post_list));
+    });
+  };
+};
 
-// 파이어베이스랑 통신하는 부분
-// export const setPostFB = () => {
-//   return function (dispatch) {
-//     post_db.get().then((docs) => {
-//       let post_data = [];
-//       docs.forEach((doc) => {
-//         if (doc.exists) {
-//           post_data = [...post_data, { id: doc.id, ...doc.data() }];
-//         }
-//       });
-
-//       // 이제 액션 생성 함수한테 우리가 가져온 데이터를 넘겨줘요! 그러면 끝!
-//       dispatch(setPost(post_data));
-//     });
-//   };
-// };
-
-const setPostDB = () => {
-  return function (dispatch, getState) {
-    axios
-      .get("http://3.36.119.207/")
-      .then((res) => {
-        console.log(res.data);
+const addPostDB = (
+  title,
+  animalName,
+  animalSpecies,
+  animalBreed,
+  animalGender,
+  animalAge,
+  animalStory,
+  animalPhoto
+) => {
+  return function (dispatch, getState, { history }) {
+    let _post = {
+      ...initialPost,
+      title: title,
+      animalName: animalName,
+      animalSpecies: animalSpecies,
+      animalBreed: animalBreed,
+      animalGender: animalGender,
+      animalAge: animalAge,
+      animalStory: animalStory,
+      animalPhoto: animalPhoto,
+    };
+    axios({
+      method: "POST",
+      url: "http://3.36.119.207/api/animals",
+      data: _post,
+    })
+      .then((docs) => {
+        let post = { ..._post, id: docs.data.length + 1 };
+        console.log(docs);
+        dispatch(addPost(post));
+        history.replace("/");
       })
       .catch((err) => {
-        console.log("setPost하던 도중 에러 발생!");
+        console.log("post 작성 실패", err);
       });
   };
 };
 
-export const addPostFB = (post) => {
-  return function (dispatch) {
-    // 생성할 데이터를 미리 만들게요!
-    let newPost;
-
-    // add()에 데이터를 넘겨줍시다!
-    post_db
-      .add(post)
-      .then((docRef) => {
-        // id를 추가한다!
-        newPost = { ...post, id: docRef.id };
-        console.log(newPost);
-
-        // 성공했을 때는? 액션 디스패치!
-        dispatch(addPost(newPost));
-      })
-      .catch((err) => {
-        // 여긴 에러가 났을 때 들어오는 구간입니다!
-        console.log(err);
-        window.alert("오류가 발생했습니다. 다시 시도해주세요.");
-      });
+const detailPostDB = (id) => {
+  return function (dispatch, getState, { history }) {
+    axios({
+      method: "GET",
+      url: "http://3.36.119.207/api/animals/:animalId",
+    }).then((doc) => {
+      console.log(doc);
+      if (!doc.data) {
+        return;
+      }
+      const post = doc.data;
+      dispatch(getPost(post));
+    });
   };
 };
 
-// handelActions(reducer 더 쉽게 만들기)
+//Reducer
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list = action.payload.post_list;
+        // getOnePostDB 에서 한개 가져오는데 메인으로 돌아가면 전체다불러온다.
+        // 근데 한개짜리랑 중복되는 포스트가 나올수도 있으니, 중복되는값을 빼주는 작업
+        // draft.list = draft.list.reduce((acc, cur) => {
+        //   if (acc.findIndex((a) => a.id === cur.id) === -1) {
+        //     return [...acc, cur];
+        //   } else {
+        //     acc[acc.findIndex((a) => a.id === cur.id)] = cur;
+        //     return acc;
+        //   }
+        // }, []);
       }),
-
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
-        // unshift는 배열 맨 앞에 데이터를 넣어줘요!
         draft.list.unshift(action.payload.post);
       }),
+    [GET_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.post = action.payload.post;
+      }),
+    [EDIT_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.post = action.payload.post;
+      }),
+    [DELETE_POST]: (state, action) => {
+      produce(state, (draft) => {});
+    },
   },
   initialState
 );
 
-// 묶어주고 export. 더 편하게 import할 수 있당
+//Action creator export
 const actionCreators = {
   setPost,
   addPost,
-  setPostDB,
+  getPost,
+  editPost,
+  getPostDB,
+  addPostDB,
+  detailPostDB,
 };
 
 export { actionCreators };

@@ -10,14 +10,12 @@ import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 
 const Detail = (props) => {
-  const dispatch = useDispatch();
-  const post = useSelector((state) => state.post.list);
+  // const dispatch = useDispatch();
+  // const post = useSelector((state) => state.post.list);
 
-  useEffect(() => {
-    dispatch(postActions.setPostDB());
-  }, [dispatch]);
-
-  console.log(post[0].animalPhoto);
+  // useEffect(() => {
+  //   dispatch(postActions.setPostDB());
+  // }, [dispatch]);
 
   return (
     <>
@@ -35,19 +33,19 @@ const Detail = (props) => {
           <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
         </TitleBox>
 
-        <h3>{post[0].title}</h3>
-        <div>{post[0].nickname}</div>
+        <h3>post[0].title</h3>
+        <div>post[0].nickname</div>
         <Line />
         <ContentBox>
           <PhotoBox />
           <DescBox>
-            <p>이름: {post[0].animalName}</p>
-            <p>종: {post[0].animalSpecies}</p>
-            <p>성별: {post[0].animalGender}</p>
-            <p>나이: {post[0].animalAge}</p>
+            <p>이름: post[0].animalName</p>
+            <p>종: post[0].animalSpecies</p>
+            <p>성별: post[0].animalGender</p>
+            <p>나이: post[0].animalAge</p>
             <p>이야기: </p>
           </DescBox>
-          <StoryBox>{post[0].animalStory}</StoryBox>
+          <StoryBox>post[0].animalStory</StoryBox>
           <ButtonBox>
             <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
           </ButtonBox>
