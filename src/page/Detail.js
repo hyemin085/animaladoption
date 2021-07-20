@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import post, { actionCreators as postActions } from "../redux/modules/post";
+import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
 import Header from "../components/Header";
 
@@ -11,12 +11,11 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 
 const Detail = ({history}) => {
     const dispatch = useDispatch();
-
+    const post_id = history.location.pathname.split('/detail/')[1]
     useEffect(() => {
-        return.
-    })
-
-    // const post = useSelector((state) => state.post.post)
+        dispatch(postActions.detailPostDB(post_id));
+    },[])
+    const post = useSelector((state) => state.post.post)
     // console.log(post)
 
 
