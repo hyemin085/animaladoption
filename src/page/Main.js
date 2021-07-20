@@ -15,11 +15,11 @@ import logo from "../logo.png";
 
 const Main = (props) => {
   const dispatch = useDispatch();
-  // const post_list = useSelector((store) => store.post.list);
+  const post_list = useSelector((state) => state.post_list);
 
   React.useEffect(() => {
-    dispatch(postActions.getPostDB());
-  }, []);
+    dispatch(postActions.setPostDB());
+  });
 
   const PaginationExampleCompact = () => (
     <Pagination
@@ -64,11 +64,6 @@ const Main = (props) => {
         </NoticeBox>
 
         <CardBox>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
-          <Card />
           <Card />
         </CardBox>
 

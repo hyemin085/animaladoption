@@ -18,71 +18,49 @@ const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
-// 수정할때 필요한것이 어떤것을 수정할 것인지(post_id) 와 수정할 내용(post)가 필요하기에 두개써줌
 
+// 리듀서가 사용할 initialState
 const initialState = {
   list: [],
   post: [],
 };
+
+// 게시글 하나에 기본적으로 들어갈 내용
 const initialPost = {
-  title: "이것은 제목....",
-  animalName: "김춘배",
-  animalSpecies: "개",
-  animalBreed: "도베르만",
-  animalGender: "수컷",
+  title: "initial title",
+  animalName: "initial animalName",
+  animalSpecies: "initial animalSpecies",
+  animalBreed: "initial animalBreed",
+  animalGender: "initial animalGender",
   animalAge: 5,
-  animalStory: "이 강아지로 말하자면.....",
-  animalPhoto: "사진",
+  animalStory: "initial animalStory",
+  animalPhoto: "initial animalPhoto",
 };
 
-const getPostDB = () => {
+const setPostDB = () => {
   return function (dispatch, getState, { history }) {
-    let post_list = [];
-    axios({
-      method: "GET",
-      url: "http://3.36.119.207/api/animals/:animalId",
-      // headers: {
-      //     "Accept": "application/json", //클라이언트가 서버한테 요청하는(원하는) 타입
-      //     "Content-Type":"application/json;charset=UTF-8", //현재 서버한테 보내는 데이터 타입
-      //     'Access-Control-Allow-Origin' : '*'
-      // },
-    }).then((docs) => {
-      const post_list = docs.data;
-      dispatch(setPost(post_list));
-    });
+    axios
+      .get("http://3.36.119.207/api/animals")
+      .then((res) => {
+        dispatch(setPost(res.data.result));
+        console.log(res.data.result);
+      })
+      .catch((err) => {
+        // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+        console.log("getPost도중 에러 발생");
+      });
   };
 };
 
-const addPostDB = (
-  title,
-  animalName,
-  animalSpecies,
-  animalBreed,
-  animalGender,
-  animalAge,
-  animalStory,
-  animalPhoto
-) => {
+const addPostDB = (post) => {
   return function (dispatch, getState, { history }) {
-    let _post = {
-      ...initialPost,
-      title: title,
-      animalName: animalName,
-      animalSpecies: animalSpecies,
-      animalBreed: animalBreed,
-      animalGender: animalGender,
-      animalAge: animalAge,
-      animalStory: animalStory,
-      animalPhoto: animalPhoto,
-    };
     axios({
       method: "POST",
       url: "http://3.36.119.207/api/animals",
-      data: _post,
+      data: post,
     })
-      .then((docs) => {
-        let post = { ..._post, id: docs.data.length + 1 };
-        console.log(docs);
+      .then((res) => {
+        console.log(res);
         dispatch(addPost(post));
         history.replace("/");
       })
@@ -112,20 +90,11 @@ const detailPostDB = (id) => {
 
 export default handleActions(
   {
-    [SET_POST]: (state, action) =>
-      produce(state, (draft) => {
-        draft.list = action.payload.post_list;
-        // getOnePostDB 에서 한개 가져오는데 메인으로 돌아가면 전체다불러온다.
-        // 근데 한개짜리랑 중복되는 포스트가 나올수도 있으니, 중복되는값을 빼주는 작업
-        // draft.list = draft.list.reduce((acc, cur) => {
-        //   if (acc.findIndex((a) => a.id === cur.id) === -1) {
-        //     return [...acc, cur];
-        //   } else {
-        //     acc[acc.findIndex((a) => a.id === cur.id)] = cur;
-        //     return acc;
-        //   }
-        // }, []);
-      }),
+    [SET_POST]: (state, action) => {
+      return produce(state, (draft) => {
+        draft.list.push(...action.payload.post_list);
+      });
+    },
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.list.unshift(action.payload.post);
@@ -151,7 +120,7 @@ const actionCreators = {
   addPost,
   getPost,
   editPost,
-  getPostDB,
+  setPostDB,
   addPostDB,
   detailPostDB,
 };
