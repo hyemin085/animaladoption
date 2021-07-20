@@ -2,13 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import {Button, Grid, Input, Text} from "../elements"
 
-
-
+import {useSelector, useDispatch} from "react-redux";
+import {actionCreators as postActions} from "../redux/modules/post";
 
 import logo from "../logo.png"
 
-const PostWrite = () => {
-    const [title, setTitle] = React.useState
+const PostWrite = (props) => {
+    const dispatch = useDispatch();
+    const is_session = sessionStorage.getItem("token") ? true : false;
+
+
     return(
         <React.Fragment>
             <img src={logo} alt="Logo" style={{margin: "0px"}}/>

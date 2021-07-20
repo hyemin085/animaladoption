@@ -36,6 +36,9 @@ const Header = (props) => {
                                 <Menu>온센터</Menu>
                                 <Menu style={{border: "none"}}>
                                     <OnButton onClick={() => {
+                                        history.push("/write");
+                                    }}>포스팅하기</OnButton>
+                                    <OnButton onClick={() => {
                                         dispatch(useActions.logOutDB());
                                     }}
                                               style={{marginTop: "-20px"}}>로그아웃</OnButton>

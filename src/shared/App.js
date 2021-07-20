@@ -8,9 +8,7 @@ import Header from "../components/Header";
 import Main from "../page/Main";
 import Signup from "../page/Signup";
 import PostWrite from "../page/PostWrite";
-
-
-
+import Detail from "../page/Detail";
 
 import {BrowserRouter, Route} from "react-router-dom";
 
@@ -19,12 +17,12 @@ function App() {
       <React.Fragment>
 
         <ConnectedRouter history={history}>
-
-      <Route path="/login" exact component={Login}/>
-      <Route path="/header" exact component={Header}/>
-      <Route path="/" exact component={Main}/>
-      <Route path="/signup" exact component={Signup}/>
-      <Route path="/write" exact component={PostWrite}/>
+            <Route path="/login" exact component={Login} />
+            <Route path="/header" exact component={Header} />
+            <Route path="/" exact component={Main} />
+            <Route path="/signup" exact component={Signup} />
+            <Route path="/write" exact component={PostWrite} />
+            <Route path="/detail/:id" exact component={Detail} />
 
         </ConnectedRouter>
       </React.Fragment>
