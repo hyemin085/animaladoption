@@ -1,148 +1,73 @@
-import {createAction, handleActions} from "redux-actions";
-import {produce} from "immer";
-import axios from "axios";
-import {getCookie, setCookie, deleteCookie} from "../../shared/Cookie"
+import React from "react";
 
-// const config = {
-//     api: 'http://3.36.119.207',
-// };
-//
-// export { config };
-//config 만들어서 관리할까 말까 고민즁
+import {makeStyles} from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+
+import {actionCreators as postActions} from "../redux/modules/post";
+import {useDispatch} from "react-redux";
+import {history} from "../redux/configureStore";
+
+const useStyles = makeStyles({
+    root: {
+        maxWidth: "100%"
+    }
+});
+const Post = React.memo((props) => {
+    const dispatch = useDispatch();
+    //material-ui 쓸 때 사용
+    const classes = useStyles();
+    return (
+        <Card className={classes.root}>
+            <CardActionArea>
+                <CardMedia
+                    component="img"
+                    alt="Contemplative Reptile"
+                    height="200vh"
+                    img
+                    src="https://mblogthumb-phinf.pstatic.net/20130303_124/ovcharka_no1_1362279507296igEt3_JPEG/1.jpg?type=w2"
+                    // http://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg
+                    //https://cdn.cashfeed.co.kr/attachments/d3b183b7d6.jpg 비글
+                    title="Contemplative Reptile"
+                />
+                <CardContent>
+                    <Typography gutterBottom variant="h5" component="h2">
+                        {props.title}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions>
+                {/*<Button size="small" color="primary">*/}
+                {/*    Share*/}
+                {/*</Button>*/}
+                {/*<Button size="small" color="primary">*/}
+                {/*    Learn More*/}
+                {/*</Button>*/}
+            </CardActions>
+        </Card>
+    );
+})
 
 
-//Action
-const SET_USER = "SET_USER";
-const GET_USER = "GET_USER";
-const LOG_OUT = "LOG_OUT";
+Post.defaultProps = {
+    id: null,
+    title: '피곤하다',
+    animalName: "김춘배",
+    animalSpecies: "개",
+    animalBreed: '도베르만',
+    animalGender: '수컷',
+    animalAge: 5,
+    animalStory: '이 강아지로 말하자면.....',
+    animalPhoto: "https://mblogthumb-phinf.pstatic.net/20130303_124/ovcharka_no1_1362279507296igEt3_JPEG/1.jpg?type=w2",
+}
 
-//initialState
-const initialState = {
-    user: null,
-    is_login: false,
-};
 
-const logOut = createAction(LOG_OUT, (user) => ({user}));
-const setUser = createAction(SET_USER, (user) => ({user}));
-const getUser = createAction(GET_USER, (user) => ({user}));
 
-//middleware actions
-//API통신을 통해 서버에 id,pwd 제공 유저 정보와 토큰 받아 저장
-const loginDB = (nickname, password) => {
-    return function (dispatch, getState, {history}) {
-        axios({
-            method: "POST",
-            url: "http://3.36.119.207/api/login",
-            headers: {
-                Accept: "application/json",
-                "Content-Type" : "application/json;charset=UTF-8",
-            },
-            data: {
-                nickname: nickname,
-                password: password,
-            },
-        })
-            .then((res) => {
-                console.log(res);
+export default Post;
 
-                dispatch(
-                    setUser({
-                        nickname: res.data.nickname,
-                        name: res.data.name,
-                    })
-                );
-                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify
-                const accessToken = res.data.token;
 
-                setCookie("is_login", `${accessToken}`);
-                document.location.href = "/";
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-};
-
-//회원가입 API
-const signUpDB = (nickname, password, name) => {
-    return function (dispatch, getState, {history}) {
-        const token = getCookie("is_login");
-        console.log(token)
-        axios({
-            method: "post",
-            url: "http://3.36.119.207/api/register",
-            data: {
-                nickname: nickname,
-                password: password,
-                name: name,
-            },
-        })
-            .then((res) => {
-                window.alert(res.data.result);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-};
-const loginCheckDB = () => {
-    return function (dispatch, getState, {history}) {
-        const token = getCookie("is_login");
-        console.log(token);
-        axios({
-            method: "post",
-            url: "http://3.36.119.207/api/token"
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-            .then((res) => {
-                console.log(res.data);
-                dispatch(
-                    setUser({
-                        nickname: res.data.nickname,
-                        name: res.data.name,
-                    })
-                );
-            })
-            .catch((error) => {
-                console.log(error.code, error.message);
-            });
-    };
-};
-
-const logoutDB = () => {
-    return function (dispatch, getState, {history}) {
-        dispatch(logOut());
-        history.replace("/");
-    };
-};
-
-export default handleActions(
-    {
-        [SET_USER]: (state, action) =>
-            produce(state, (draft) => {
-                draft.user = action.payload.user;
-                draft.is_login = true;
-            }),
-        [LOG_OUT]: (state, action) =>
-            produce(state, (draft) => {
-                deleteCookie("is_login");
-                draft.user = null;
-                draft.is_login = false;
-            }),
-        [GET_USER]: (state, action) => produce(state, (draft) => {}),
-    },
-    initialState
-);
-
-const actionCreators = {
-    logOut,
-    getUser,
-    loginDB,
-    signUpDB,
-    loginCheckDB,
-    logoutDB,
-};
-
-export {actionCreators}

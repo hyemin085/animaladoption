@@ -24,7 +24,7 @@ const loginDB = (nickname, password) => {
     return function (dispatch, getState, { history }) {
         axios({
             method: "POST",
-            url: "http://3.36.119.207/login",
+            url: "http://3.36.119.207/api/login",
             headers: {
                 "Accept": "application/json", //클라이언트가 서버한테 요청하는(원하는) 타입
                 "Content-Type":"application/json;charset=UTF-8", //현재 서버한테 보내는 데이터 타입
@@ -38,7 +38,7 @@ const loginDB = (nickname, password) => {
             console.log(res);
             //여기 물어보자
             localStorage.setItem("name", JSON.stringify(`${nickname}`)); //localStorage의 텍스트형이므로 객체 json.stringfy로 변환
-            sessionStorage.setItem("token", res.data);
+            sessionStorage.setItem("token", res.data.token);
             dispatch(logIn({
                 nickname: nickname,
                 password: password,
@@ -57,6 +57,7 @@ const logOutDB = () =>{
     return function (dispatch, getState, { history }){
         localStorage.removeItem("name");
         sessionStorage.removeItem("token");
+        console.log("token")
         dispatch(logOut());
         history.replace("/");
     }

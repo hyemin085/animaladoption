@@ -22,3 +22,4 @@ const P = styled.p`
 
 `;
 export default Text;
+

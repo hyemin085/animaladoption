@@ -1,12 +1,14 @@
 import React from "react";
 import styled from "styled-components";
 import {Button, Grid, Input, Text} from "../elements"
-import TextField from "@material-ui/core/TextField";
+
+
+
 
 import logo from "../logo.png"
 
 const PostWrite = () => {
-
+    const [title, setTitle] = React.useState
     return(
         <React.Fragment>
             <img src={logo} alt="Logo" style={{margin: "0px"}}/>

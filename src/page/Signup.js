@@ -3,6 +3,8 @@ import styled from "styled-components";
 import {Text, Input, Grid, Button} from "../elements"
 import {history} from "../redux/configureStore";
 import Login from "./Login";
+import Header from "../components/Header";
+
 import logo from "../logo.png"
 import {useDispatch} from "react-redux";
 import {actionCreators as userActions} from "../redux/modules/user";
@@ -31,13 +33,15 @@ const Signup = () => {
 
     return (
         <React.Fragment>
-            <img src={logo} alt="Logo" style={{margin: "0px"}}/>
-            <Grid padding="50px">
+
+            {/*<img src={logo} alt="Logo" style={{margin: "0px"}}/>*/}
+            <Header/>
+            <Grid padding="2em">
                 <Container>
                     <Title>
                         <h2 style={{
                             textAlign: 'left',
-                            margin: '30px 0px 0px 0px',
+                            margin: '0px 0px 0px 0px',
                             padding: '30px'
                         }}
                         >회원가입</h2><p style={{marginLeft: '34px', fontSize: '1.2em'}}>"모든 생명은 보호받고 존중받을 권리가 있습니다"<br/>
@@ -87,7 +91,7 @@ const Signup = () => {
                         {/*    placeholder="생일을 입력해주세요"/>*/}
                         <br/>
                         <Grid padding="20px 0px">
-                            <Button _onClick={siteSignup}>가입하기</Button>
+                            <Button _onClick={siteSignup} text="가입하기"></Button>
 
                         </Grid>
                     </InputBox>
@@ -117,10 +121,11 @@ const Main = styled.div`
 
 const Container = styled.div`
   height: 15vw;
-  width: 55vw;
+  width: 55.5em;
   margin: auto;
   background-color: #67BFB2;
   color: white;
+  overflow: hidden;
 
 `;
 
@@ -133,7 +138,7 @@ const Title = styled.div`
 const SignBox = styled.div`
   width: 55vw;
   height: 200vh;
-  border: 1px solid black;
+  border: 1px solid white;
   margin: auto;
 `;
 

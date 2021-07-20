@@ -10,6 +10,7 @@ export const history = createBrowserHistory({});
 
 const rootReducer = combineReducers({
     user: User,
+
     router: connectRouter(history),
 });
 const middlewares = [thunk.withExtraArgument({history:history})];
