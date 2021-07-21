@@ -1,56 +1,42 @@
-//확인하고 지울지 말지 지울지 말지 고민할 것
-
 import React from "react";
-import styled from "styled-components";
-import axios from "axios";
 import { Button } from "../elements";
+import {storage} from "./firebase";
+
+import {useDispatch, useSelector} from "react-redux";
+import {actionCreators as imageActions} from "../redux/modules/image";
 
 const Upload = (props) => {
+    const dispatch = useDispatch();
+    const is_uploading = useSelector(state => state.image.uploading);
+
     const fileInput = React.useRef();
-    const [file, setFile] = React.useState(null);
 
-    // ref 를 쓰는 이유 : 파일을 선택하고 업로드 할때 접근하기 위해서임. 파일선택하자마자가 아니라(not e)
     const selectFile = (e) => {
-        setFile(e.target.files[0]);
 
+        // console.log(e.target.files);
+        // // 선택한 파일이 어떻게 저장되어 있나 봅시다.
         // console.log(e.target.files[0]);
-        // console.log(fileInput.current.files[0]); // 파일정보임!
-    };
-    console.log(file);
-    let formData = new FormData();
+        //
+        // // ref로도 확인해봅시다. :)
+        // console.log(fileInput.current.files[0]);
+        const reader = new FileReader();
+        const file = fileInput.current.files[0];
 
-    formData.append("img", file); //file : 업로드할 이미지 정보
-
-    const uploadDB = () => {
-        axios({
-            method: "post",
-            url: "",
-            data: formData,
-        })
-            .then((res) => {
-                console.log(res.data);
-            })
-            .catch((err) => {
-                console.log("이미지업로드 실패", err);
-            });
+        reader.readAsDataURL(file);
+        //읽기가 끝나면 발생하는 이벤트 핸들러
+        reader.onloadend = () => {
+            console.log(reader.result);
+            dispatch(imageActions.setPreview(reader.result));
+        }
     };
+
+
 
     return (
         <React.Fragment>
-            <UploadWrap>
-                <input type="file" onChange={selectFile} ref={fileInput} />
-            </UploadWrap>
-            {/* <Button _onClick={uploadDB}>업로드</Button> */}
+            <input type="file" ref={fileInput} onChange={selectFile} disabled={is_uploading}/>
         </React.Fragment>
     );
 };
-
-const UploadWrap = styled.div`
-  box-sizing: border-box;
-  border: 1px solid #dddddd;
-  width: 100%;
-  padding: 12px 4px;
-  font-size: 1rem;
-`;
 
 export default Upload;

@@ -25,7 +25,6 @@ const addCommentDB = (comment, post_id) => {
         console.log(comment)
         let _comment = {
             commentId: post_id,
-            animalId: "나중에 추가할 것",
             userId: comment.name,
             description: comment.comment,
             date: moment().format("YYYY-MM-DD HH:mm:ss")
@@ -47,14 +46,10 @@ const addCommentDB = (comment, post_id) => {
 
 //화면 새로고침 했을때 리덕스 STORE에 있는 정보 다 날라가서 다시 리덕스 STORE에 저장
 
-const getCommentRX = (post_id = null) => {
+const getCommentRX = (animalID) => {
     return function (dispatch) {
-        if (!post_id) {
-            return;
-        }
-        console.log(post_id)
         axios
-            .get("http://3.36.119.207/api/comment/:animalId")
+            .get(`http://3.36.119.207/api/animals/${animalID}`)
             .then((response) => {
                 console.log(response)
 // axios.get(`http://15.164.217.16/api/comments/${post_id}`)
@@ -69,18 +64,18 @@ const getCommentRX = (post_id = null) => {
                     comment_list.unshift(comment)
                 })
                 console.log(comment_list)
-                dispatch(setComment(comment_list, post_id))
+                dispatch(setComment(comment_list))
             }).catch((error) => {
             window.alert("댓글 불러오기 오류")
         })
     }
 }
 
-const deleteCommentDB = (id, post_id) => {
+const deleteCommentDB = (id) => {
     return function (dispatch, getState){
-        axios.delete("http://3.36.119.207/api/comment/${id}")
+        axios.delete(`http://3.36.119.207/api/comment/${id}`)
             .then((res) => {
-                dispatch(deleteComment(id, post_id));
+                dispatch(deleteComment(id));
             }).catch((error) => {
                 window.alert("게시물 삭제 오류")
         })

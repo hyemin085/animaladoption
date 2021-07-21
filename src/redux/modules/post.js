@@ -5,26 +5,26 @@ import axios from "axios";
 //actions
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const DETAIL_POST = "DETAIL_POST";
 const EDIT_POST = "EDIT_POST";
-const GET_POST = "GET_POST";
 const DELETE_POST = "DELETE_POST";
-const DETAIL_POST = "DETAIL_POST"
+const LIKE_POST = "LIKE_POST";
 
 //Action creators
-// 인자로 들어가는값, 뱉어지는 값의 변수들도 중요! 이 변수로 action에 전달되는겨
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
-const getPost = createAction(GET_POST, (post) => ({ post }));
-const detailPost = createAction(DETAIL_POST, (post)=> ({post}));
+const detailPost = createAction(DETAIL_POST, (post) => ({ post }));
 const editPost = createAction(EDIT_POST, (post_id, post) => ({
     post_id,
     post,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
+const likePost = createAction(LIKE_POST, (post_id) => ({ post_id }));
 
 // 게시글 하나에 기본적으로 들어갈 내용
 const initialPost = {
     title: "initial title",
+    like: 10,
     animalName: "initial animalName",
     animalSpecies: "initial animalSpecies",
     animalBreed: "initial animalBreed",
@@ -37,6 +37,7 @@ const initialPost = {
 // 리듀서가 사용할 initialState
 const initialState = {
     list: [],
+    post: initialPost,
 };
 
 const setPostDB = () => {
@@ -45,6 +46,22 @@ const setPostDB = () => {
             .get("http://3.36.119.207/api/animals")
             .then((res) => {
                 dispatch(setPost(res.data.result));
+                console.log("setPostDB", res.data.result);
+            })
+            .catch((err) => {
+                // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
+                console.log("getPost도중 에러 발생");
+            });
+    };
+};
+
+const detailPostDB = (animalID) => {
+    return function (dispatch, getState, { history }) {
+        axios
+            .get(`http://3.36.119.207/api/animals/${animalID}`)
+            .then((res) => {
+                dispatch(detailPost(res.data.result));
+                console.log("detailPostDB", res);
             })
             .catch((err) => {
                 // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -55,11 +72,11 @@ const setPostDB = () => {
 
 const addPostDB = (post) => {
     return function (dispatch, getState, { history }) {
-        axios({
-            method: "POST",
-            url: "http://3.36.119.207/api/animals",
-            data: post,
-        })
+        const headers = {
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        };
+        axios
+            .post("http://3.36.119.207/api/animals", { headers: headers })
             .then((res) => {
                 console.log(res);
                 dispatch(addPost(post));
@@ -71,21 +88,56 @@ const addPostDB = (post) => {
     };
 };
 
-const detailPostDB = (animalID) => {
-    return function (dispatch, getState, {history}) {
+const editPostDB = (post_id, post) => {
+    return function (dispatch, getState, { history }) {
         const headers = {
-            authorization: `Bearer ${sessionStorage.getItem("token")}`
-        }
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        };
         axios
-            .get(`http://3.36.119.207/api/animals/${animalID}`,
-                {headers: headers})
+            .put(`http://3.36.119.207/api/animals/${post_id}`, post, {
+                headers: headers,
+            })
             .then((res) => {
-                dispatch(detailPost(res.data.result));
-                console.log(res.data.result);
+                dispatch(editPost(res.data.result));
+                history.push("/");
+                window.location.reload();
             })
             .catch((err) => {
                 // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
-                console.log("getPost도중 에러 발생");
+                console.log("editPost도중 에러 발생");
+            });
+    };
+};
+
+const deletePostDB = (post_id) => {
+    return function (dispatch, getState, { history }) {
+        const headers = {
+            authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        };
+        axios
+            .delete(`http://3.36.119.207/api/animals/${post_id}`, {
+                headers: headers,
+            })
+            .then((res) => {
+                dispatch(deletePost(post_id));
+                console.log(res);
+            })
+            .catch((err) => {
+                console.log("deletePost도중 에러 발생");
+            });
+    };
+};
+
+const likePostDB = (post_id) => {
+    return function (dispatch, getState, { history }) {
+        axios
+            .post(`http://3.36.119.207/api/animalLike/${post_id}`)
+            .then((res) => {
+                dispatch(likePost(res.data));
+                console.log(res.data);
+            })
+            .catch((err) => {
+                console.log("like update 실패", err);
             });
     };
 };
@@ -98,29 +150,30 @@ export default handleActions(
             return produce(state, (draft) => {
                 // draft.list.push(...action.payload.post_list);
                 draft.list = action.payload.post_list;
-                // ^ 여기서 draft는 아마도 post.js의 state(?)
             });
         },
         [ADD_POST]: (state, action) =>
             produce(state, (draft) => {
                 draft.list.unshift(action.payload.post);
             }),
-        [GET_POST]: (state, action) =>
+        [DETAIL_POST]: (state, action) =>
             produce(state, (draft) => {
+                // console.log(action.payload.post)
                 draft.post = action.payload.post;
             }),
         [EDIT_POST]: (state, action) =>
             produce(state, (draft) => {
                 draft.post = action.payload.post;
             }),
-        [DETAIL_POST]: (state, action) =>
+        [DELETE_POST]: (state, action) =>
             produce(state, (draft) => {
-                // console.log(action.payload.post)
+                const { post_id } = action.payload;
+                draft.list = draft.list.filter((post) => post.animalId !== post_id);
+            }),
+        [LIKE_POST]: (state, action) =>
+            produce(state, (draft) => {
                 draft.post = action.payload.post;
             }),
-        [DELETE_POST]: (state, action) => {
-            produce(state, (draft) => {});
-        },
     },
     initialState
 );
@@ -129,11 +182,15 @@ export default handleActions(
 const actionCreators = {
     setPost,
     addPost,
-    getPost,
     editPost,
+    editPostDB,
     setPostDB,
     addPostDB,
     detailPostDB,
+    deletePost,
+    deletePostDB,
+    likePost,
+    likePostDB,
 };
 
 export { actionCreators };

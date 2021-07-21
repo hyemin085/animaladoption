@@ -1,27 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
 import Header from "../components/Header";
+import commentList from "../components/CommentList"
 
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import TwitterIcon from "@material-ui/icons/Twitter";
 
-const Detail = ({history}) => {
+const Detail = (props) => {
     const dispatch = useDispatch();
-    const post_id = history.location.pathname.split('/detail/')[1]
+
+    const post = useSelector((state) => state.post.post);
+    const post_id = props.history.location.pathname.split("/detail/")[1];
+
+    console.log(post.like);
+
     useEffect(() => {
         dispatch(postActions.detailPostDB(post_id));
-    },[])
-    const post = useSelector((state) => state.post.post)
-    // console.log(post)
+    }, []);
+    // 실제로 변수 post에 값이 담기는 시점은 여기. 근데 그 전에 한번 필드를 한번 훑으면서 렌더링하니까 console.log(post)가 undefined가 먼저 찍히는거임;;
 
+    const deletePost = () => {
+        dispatch(postActions.deletePostDB(post_id));
+        props.history.push("/");
+    };
 
+    const likePost = (like) => {
+        dispatch(postActions.likePostDB(post_id));
+        window.alert("좋아요가 추가되었습니다");
+    };
 
-    if(!post){
-        return(<></>)
+    if (!post) {
+        return <></>;
     }
 
     return (
@@ -41,9 +54,10 @@ const Detail = ({history}) => {
                 </TitleBox>
 
                 <h3>{post.title}</h3>
+                <div>post.nickname</div>
                 <Line />
                 <ContentBox>
-                    <PhotoBox style={{backgroundImage: `url(${post.animalPhoto})`}}/>
+                    <PhotoBox style={{ backgroundImage: `url(${post.animalPhoto})` }} />
                     <DescBox>
                         <p>이름: {post.animalName}</p>
                         <p>종: {post.animalSpecies}</p>
@@ -54,13 +68,26 @@ const Detail = ({history}) => {
                     <StoryBox>{post.animalStory}</StoryBox>
                     <ButtonBox>
                         <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
+                        <ApplyButton
+                            onClick={() => {
+                                props.history.push(`/edit/${post_id}`);
+                            }}
+                        >
+                            게시글 수정
+                        </ApplyButton>
+                        <ApplyButton
+                            style={{ backgroundColor: "#E97879" }}
+                            onClick={deletePost}
+                        >
+                            게시글 삭제
+                        </ApplyButton>
                     </ButtonBox>
                 </ContentBox>
 
                 <Line />
                 <IconBox>
                     <IconEachBox>
-                        <ThumbUpOutlinedIcon />
+                        <ThumbUpOutlinedIcon onClick={likePost} />
                     </IconEachBox>
                     <IconEachBox>
                         <FacebookIcon color="primary" />
@@ -75,7 +102,7 @@ const Detail = ({history}) => {
                     <MoveEachBox>&lt; 이전글</MoveEachBox>
                     <MoveEachBox
                         onClick={() => {
-                            history.push("/");
+                            props.history.push("/");
                         }}
                     >
                         목록으로
@@ -130,8 +157,7 @@ const Detail = ({history}) => {
                 </CommentBox>
 
                 <div>
-                    파양되어 돌아온 아이는 더 마음이 아플 수 밖에 없네요.. 좋은 가족을
-                    만나 행복했으면 좋겠어요
+                    <commentList/>
                 </div>
                 <Line />
                 <Line />
@@ -153,6 +179,7 @@ const Title = styled.h1`
 const ApplyButton = styled.button`
   height: 6vh;
   padding: 0 1.5vw;
+  margin: 0 3vw;
   background-color: #66beb2;
   color: white;
   font-size: 15px;

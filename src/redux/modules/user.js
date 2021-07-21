@@ -11,13 +11,26 @@ const GET_USER = "GET_USER"; //유저정보 가져오기
 //actionCreators
 const logIn = createAction(LOG_IN, (user) => ({user}));
 const logOut = createAction(LOG_OUT, (user) => ({user}));
-const loginCheck = createAction(LOGIN_CHECK, (session) => ({session}));
 const getUser = createAction(GET_USER, (user) => ({user}));
 
 //initialState
 const initialState = {
     user_list: [],
     is_login: false,
+};
+
+const loginCheck = () => {
+    return function (dispatch, getState, {history}) {
+        axios.get('http://3.36.119.207/api/token',
+            {headers: {'Authorization': `Bearer ${sessionStorage.getItem("token")}`}})
+            .then((response) => {
+                // console.log(response.data.user)
+                dispatch(logIn(response.data.user))
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 };
 
 const loginDB = (nickname, password) => {
@@ -41,7 +54,6 @@ const loginDB = (nickname, password) => {
             sessionStorage.setItem("token", res.data.token);
             dispatch(logIn({
                 nickname: nickname,
-                password: password,
             }));
             history.push("/");
             window.alert("정상적으로 로그인 되었습니다!")
@@ -64,7 +76,7 @@ const logOutDB = () =>{
 }
 
 //회원가입api
-const signupDB = (nickname, password) => {
+const signupDB = (nickname, password, name) => {
     return function (dispatch, getState, { history }){
         axios({
             method: "POST",
@@ -78,7 +90,7 @@ const signupDB = (nickname, password) => {
                 nickname: nickname,
                 password: password,
                 passwordConfirm : password,
-                name: "헹구",
+                name: name,
 
             }
         }).then((res)=>{

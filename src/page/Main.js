@@ -16,7 +16,6 @@ import logo from "../logo.png";
 const Main = (props) => {
     const dispatch = useDispatch();
     const card_list = useSelector((state) => state.post.list);
-    // console.log(card_list)
 
     React.useEffect(() => {
         dispatch(postActions.setPostDB());
@@ -64,12 +63,8 @@ const Main = (props) => {
                     </PhotoBox>
                 </NoticeBox>
 
-                })}
                 <CardBox>
-                    {card_list.map((i, idx) => {
-                        // console.log(i);
-                        return <Card key={i.id} {...i} />
-                    })}
+                    <Card />
                 </CardBox>
 
                 <PaginationContainer>
