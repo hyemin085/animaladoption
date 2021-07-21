@@ -32,7 +32,6 @@ const PostEdit = (props) => {
         "https://elaineimages.s3.ap-northeast-2.amazonaws.com/Alexander_Averin_07.jpg",
     };
     dispatch(postActions.editPostDB(post_id, post));
-    console.log(post_id, post);
     props.history.push("/");
   };
   return (

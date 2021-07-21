@@ -65,7 +65,7 @@ const detailPostDB = (animalID) => {
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
-        console.log("getPost도중 에러 발생");
+        console.log("detailPost도중 에러 발생");
       });
   };
 };
@@ -76,14 +76,16 @@ const addPostDB = (post) => {
       authorization: `Bearer ${sessionStorage.getItem("token")}`,
     };
     axios
-      .post("http://3.36.119.207/api/animals", { headers: headers })
+      .post("http://3.36.119.207/api/animals", post, { headers: headers })
+      // 인자로 들어온 post가 데이터로 들어간다
       .then((res) => {
         console.log(res);
         dispatch(addPost(post));
-        history.replace("/");
+        window.location.reload();
       })
       .catch((err) => {
-        console.log("post 작성 실패", err);
+        console.log("addPost도중 에러 발생", err);
+        console.dir(err);
       });
   };
 };
@@ -98,13 +100,13 @@ const editPostDB = (post_id, post) => {
         headers: headers,
       })
       .then((res) => {
-        dispatch(editPost(res.data.result));
-        history.push("/");
+        dispatch(editPost(post_id, post));
         window.location.reload();
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
         console.log("editPost도중 에러 발생");
+        console.dir(err);
       });
   };
 };
@@ -120,10 +122,10 @@ const deletePostDB = (post_id) => {
       })
       .then((res) => {
         dispatch(deletePost(post_id));
-        console.log(res);
       })
       .catch((err) => {
         console.log("deletePost도중 에러 발생");
+        console.dir(err);
       });
   };
 };
@@ -133,8 +135,8 @@ const likePostDB = (post_id) => {
     axios
       .post(`http://3.36.119.207/api/animalLike/${post_id}`)
       .then((res) => {
-        dispatch(likePost(res.data));
         console.log(res.data);
+        dispatch(likePost(res.data));
       })
       .catch((err) => {
         console.log("like update 실패", err);
@@ -164,6 +166,10 @@ export default handleActions(
     [EDIT_POST]: (state, action) =>
       produce(state, (draft) => {
         draft.post = action.payload.post;
+        // ^ 이렇게 쓰면 post 하나는 수정 되는데 list는 안바뀜. 그래서 수정후 메인페이지로 push되었을 때 제목이 이전꺼로 보이는거임
+
+        draft.list = draft.list.splice(0);
+        // ^ 새로고침 해야만 새로운 list가 메인페이지에 반영되는것을 고치려고 얘를 써봤지만.. 무소용..
       }),
     [DELETE_POST]: (state, action) =>
       produce(state, (draft) => {
@@ -172,7 +178,12 @@ export default handleActions(
       }),
     [LIKE_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.post = action.payload.post;
+        // action.payload를 콘솔 찍어보면 post_id: {ok: true, 메세지: 성공} 이렇게 뜬다. payload.post하면 undefined. draft.post가 undefined된다.
+        // detail.js에 썼던 state.post.post의 마지막 post로 이 draft.post가 들어가는 거기 때문에, undefined가 뜨는것..
+        // draft.post = action.payload.post; <-위 이유때문에 얘는 안됨
+
+        draft.post.like = state.post.like + 1;
+        // ^state는 post.js의 state, post는 게시글 하나하나의 데이터..
       }),
   },
   initialState

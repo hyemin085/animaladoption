@@ -15,8 +15,6 @@ const Detail = (props) => {
   const post = useSelector((state) => state.post.post);
   const post_id = props.history.location.pathname.split("/detail/")[1];
 
-  console.log(post.like);
-
   useEffect(() => {
     dispatch(postActions.detailPostDB(post_id));
   }, []);
@@ -25,16 +23,61 @@ const Detail = (props) => {
   const deletePost = () => {
     dispatch(postActions.deletePostDB(post_id));
     props.history.push("/");
+    window.location.reload();
   };
 
-  const likePost = (like) => {
+  const likePost = () => {
     dispatch(postActions.likePostDB(post_id));
     window.alert("좋아요가 추가되었습니다");
+    props.history.push("/");
   };
 
   if (!post) {
     return <></>;
   }
+
+  const is_login = useSelector((state) => state.user.is_login);
+
+  // const editDeleteButtons = () => {
+  //   if (is_login) {
+  //     <>
+  //       <ApplyButton
+  //         onClick={() => {
+  //           props.history.push(`/edit/${post_id}`);
+  //         }}
+  //       >
+  //         게시글 수정
+  //       </ApplyButton>
+  //       <ApplyButton
+  //         style={{ backgroundColor: "#E97879" }}
+  //         onClick={deletePost}
+  //       >
+  //         게시글 삭제
+  //       </ApplyButton>
+  //     </>;
+  //   } else {
+  //     <>
+  //       <ApplyButton
+  //         onClick={() => {
+  //           "로그인 후 이용해주세요!";
+  //           props.history.push("/login");
+  //         }}
+  //       >
+  //         게시글 수정
+  //       </ApplyButton>
+  //       <ApplyButton
+  //         style={{ backgroundColor: "#E97879" }}
+  //         onClick={() => {
+  //           "로그인 후 이용해주세요!";
+  //           props.history.push("/login");
+  //         }}
+  //       >
+  //         게시글 삭제
+  //       </ApplyButton>
+  //     </>;
+  //   }
+  // };
+  // useSelector와 if문은 함께할수 없다네요.. 에러를 뱉습니다..
 
   return (
     <>
@@ -67,19 +110,7 @@ const Detail = (props) => {
           <StoryBox>{post.animalStory}</StoryBox>
           <ButtonBox>
             <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
-            <ApplyButton
-              onClick={() => {
-                props.history.push(`/edit/${post_id}`);
-              }}
-            >
-              게시글 수정
-            </ApplyButton>
-            <ApplyButton
-              style={{ backgroundColor: "#E97879" }}
-              onClick={deletePost}
-            >
-              게시글 삭제
-            </ApplyButton>
+            ////
           </ButtonBox>
         </ContentBox>
 
