@@ -1,56 +1,64 @@
-//확인하고 지울지 말지 지울지 말지 고민할 것
+import { createAction, handleActions } from "redux-actions";
+import produce from "immer";
+import { storage } from "../../shared/firebase";
+​
 
-import React from "react";
-import styled from "styled-components";
-import axios from "axios";
-import { Button } from "../elements";
-
-const Upload = (props) => {
-  const fileInput = React.useRef();
-  const [file, setFile] = React.useState(null);
-
-  // ref 를 쓰는 이유 : 파일을 선택하고 업로드 할때 접근하기 위해서임. 파일선택하자마자가 아니라(not e)
-  const selectFile = (e) => {
-    setFile(e.target.files[0]);
-
-    // console.log(e.target.files[0]);
-    // console.log(fileInput.current.files[0]); // 파일정보임!
-  };
-  console.log(file);
-  let formData = new FormData();
-
-  formData.append("img", file); //file : 업로드할 이미지 정보
-
-  const uploadDB = () => {
-    axios({
-      method: "post",
-      url: "",
-      data: formData,
-    })
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((err) => {
-        console.log("이미지업로드 실패", err);
-      });
-  };
-
-  return (
-    <React.Fragment>
-      <UploadWrap>
-        <input type="file" onChange={selectFile} ref={fileInput} />
-      </UploadWrap>
-      {/* <Button _onClick={uploadDB}>업로드</Button> */}
-    </React.Fragment>
-  );
+const UPLOADING = "UPLOADING";
+const UPLOAD_PROFILE = "UPLOAD_PROFILE";
+const SET_PREVIEW = "SET_PREVIEW";
+​
+const uploading = createAction(UPLOADING, (uploading) => ({ uploading }));
+const uploadProfile = createAction(UPLOAD_PROFILE, (profile_url) => ({
+    profile_url,
+}));
+const setPreview = createAction(SET_PREVIEW, (preview) => ({ preview }));
+​
+const initialState = {
+    profile_url: "",
+    uploading: false,
+    preview: null,
 };
-
-const UploadWrap = styled.div`
-  box-sizing: border-box;
-  border: 1px solid #dddddd;
-  width: 100%;
-  padding: 12px 4px;
-  font-size: 1rem;
-`;
-
-export default Upload;
+​
+const uploadProfileFB = (image) => {
+    return function (dispatch, getState, { history }) {
+        dispatch(uploading(true));
+​
+        const _upload = storage
+            .ref(`images/${image.name}${new Date().getTime()}`)
+            .put(image);
+        _upload.then((snap) => {
+            console.log(snap);
+            dispatch(uploading(false));
+            snap.ref.getDownloadURL().then((url) => {
+                dispatch(uploadProfile(url));
+                console.log(url);
+            });
+        });
+    };
+};
+​
+export default handleActions(
+    {
+        [UPLOAD_PROFILE]: (state, action) =>
+            produce(state, (draft) => {
+                draft.profile_url = action.payload.profile_url;
+                draft.uploading = false;
+            }),
+        [UPLOADING]: (state, action) =>
+            produce(state, (draft) => {
+                draft.uploading = action.payload.uploading;
+            }),
+        [SET_PREVIEW]: (state, action) =>
+            produce(state, (draft) => {
+                draft.preview = action.payload.preview;
+            }),
+    },
+    initialState
+);
+​
+const actionCreators = {
+    uploadProfileFB,
+    setPreview,
+};
+​
+export { actionCreators };

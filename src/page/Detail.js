@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
 import Header from "../components/Header";
+import commentList from "../components/CommentList";
 
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";
@@ -29,56 +30,11 @@ const Detail = (props) => {
     window.location.reload();
   };
 
-  const likePost = () => {
+  const likePost = (like) => {
     dispatch(postActions.likePostDB(post_id));
     window.alert("좋아요가 추가되었습니다");
     props.history.push("/");
   };
-
-  const editDeleteButtons = () => {
-    if (is_login) {
-      return (
-        <>
-          <ApplyButton
-            onClick={() => {
-              props.history.push(`/edit/${post_id}`);
-            }}
-          >
-            게시글 수정
-          </ApplyButton>
-          <ApplyButton
-            style={{ backgroundColor: "#E97879" }}
-            onClick={deletePost}
-          >
-            게시글 삭제
-          </ApplyButton>
-        </>
-      );
-    } else {
-      return (
-        <>
-          <ApplyButton
-            onClick={() => {
-              "로그인 후 이용해주세요!";
-              props.history.push("/login");
-            }}
-          >
-            게시글 수정
-          </ApplyButton>
-          <ApplyButton
-            style={{ backgroundColor: "#E97879" }}
-            onClick={() => {
-              "로그인 후 이용해주세요!";
-              props.history.push("/login");
-            }}
-          >
-            게시글 삭제
-          </ApplyButton>
-        </>
-      );
-    }
-  };
-  // useSelector와 if문은 함께할수 없다네요.. 에러를 뱉습니다..
 
   return (
     <>
@@ -111,7 +67,19 @@ const Detail = (props) => {
           <StoryBox>{post.animalStory}</StoryBox>
           <ButtonBox>
             <ApplyButton>♥ 입양 · 임시보호 신청</ApplyButton>
-            {editDeleteButtons}
+            <ApplyButton
+              onClick={() => {
+                props.history.push(`/edit/${post_id}`);
+              }}
+            >
+              게시글 수정
+            </ApplyButton>
+            <ApplyButton
+              style={{ backgroundColor: "#E97879" }}
+              onClick={deletePost}
+            >
+              게시글 삭제
+            </ApplyButton>
           </ButtonBox>
         </ContentBox>
 
@@ -188,8 +156,7 @@ const Detail = (props) => {
         </CommentBox>
 
         <div>
-          파양되어 돌아온 아이는 더 마음이 아플 수 밖에 없네요.. 좋은 가족을
-          만나 행복했으면 좋겠어요
+          <commentList />
         </div>
         <Line />
         <Line />
