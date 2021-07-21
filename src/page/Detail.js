@@ -36,7 +36,7 @@ const Detail = (props) => {
     return <></>;
   }
 
-  const is_login = useSelector((state) => state.user.is_login);
+  // const is_login = useSelector((state) => state.user.is_login);
 
   // const editDeleteButtons = () => {
   //   if (is_login) {
