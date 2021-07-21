@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
@@ -11,20 +11,26 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
+
+  const post = useSelector((state) => state.post.post);
   const post_id = props.history.location.pathname.split("/detail/")[1];
-  console.log(post_id);
+
+  console.log(post.like);
 
   useEffect(() => {
     dispatch(postActions.detailPostDB(post_id));
   }, []);
+  // 실제로 변수 post에 값이 담기는 시점은 여기. 근데 그 전에 한번 필드를 한번 훑으면서 렌더링하니까 console.log(post)가 undefined가 먼저 찍히는거임;;
 
-  const deletePost = (post_id) => {
-    dispatch(postActions.deletePost(post_id));
+  const deletePost = () => {
+    dispatch(postActions.deletePostDB(post_id));
     props.history.push("/");
   };
 
-  const post = useSelector((state) => state.post.post);
-  console.log(post);
+  const likePost = (like) => {
+    dispatch(postActions.likePostDB(post_id));
+    window.alert("좋아요가 추가되었습니다");
+  };
 
   if (!post) {
     return <></>;
@@ -80,7 +86,7 @@ const Detail = (props) => {
         <Line />
         <IconBox>
           <IconEachBox>
-            <ThumbUpOutlinedIcon />
+            <ThumbUpOutlinedIcon onClick={likePost} />
           </IconEachBox>
           <IconEachBox>
             <FacebookIcon color="primary" />

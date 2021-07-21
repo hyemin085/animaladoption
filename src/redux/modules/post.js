@@ -5,9 +5,10 @@ import axios from "axios";
 //actions
 const SET_POST = "SET_POST";
 const ADD_POST = "ADD_POST";
+const DETAIL_POST = "DETAIL_POST";
 const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
-const DETAIL_POST = "DETAIL_POST";
+const LIKE_POST = "LIKE_POST";
 
 //Action creators
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
@@ -18,10 +19,12 @@ const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post,
 }));
 const deletePost = createAction(DELETE_POST, (post_id) => ({ post_id }));
+const likePost = createAction(LIKE_POST, (post_id) => ({ post_id }));
 
 // 게시글 하나에 기본적으로 들어갈 내용
 const initialPost = {
   title: "initial title",
+  like: 10,
   animalName: "initial animalName",
   animalSpecies: "initial animalSpecies",
   animalBreed: "initial animalBreed",
@@ -34,6 +37,7 @@ const initialPost = {
 // 리듀서가 사용할 initialState
 const initialState = {
   list: [],
+  post: initialPost,
 };
 
 const setPostDB = () => {
@@ -42,7 +46,7 @@ const setPostDB = () => {
       .get("http://3.36.119.207/api/animals")
       .then((res) => {
         dispatch(setPost(res.data.result));
-        // console.log(res.data.result);
+        console.log("setPostDB", res.data.result);
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -53,14 +57,11 @@ const setPostDB = () => {
 
 const detailPostDB = (animalID) => {
   return function (dispatch, getState, { history }) {
-    const headers = {
-      authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    };
     axios
-      .get(`http://3.36.119.207/api/animals/${animalID}`, { headers: headers })
+      .get(`http://3.36.119.207/api/animals/${animalID}`)
       .then((res) => {
         dispatch(detailPost(res.data.result));
-        console.log(res.data.result);
+        console.log("detailPostDB", res);
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -71,11 +72,11 @@ const detailPostDB = (animalID) => {
 
 const addPostDB = (post) => {
   return function (dispatch, getState, { history }) {
-    axios({
-      method: "POST",
-      url: "http://3.36.119.207/api/animals",
-      data: post,
-    })
+    const headers = {
+      authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    };
+    axios
+      .post("http://3.36.119.207/api/animals", { headers: headers })
       .then((res) => {
         console.log(res);
         dispatch(addPost(post));
@@ -89,14 +90,17 @@ const addPostDB = (post) => {
 
 const editPostDB = (post_id, post) => {
   return function (dispatch, getState, { history }) {
-    // const headers = {
-    //   authorization: `Bearer ${sessionStorage.getItem("token")}`,
-    // };
+    const headers = {
+      authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    };
     axios
-      .put(`http://3.36.119.207/api/animals/${post_id}`, post)
+      .put(`http://3.36.119.207/api/animals/${post_id}`, post, {
+        headers: headers,
+      })
       .then((res) => {
         dispatch(editPost(res.data.result));
-        history.replace("/");
+        history.push("/");
+        window.location.reload();
       })
       .catch((err) => {
         // 요청이 정상적으로 끝나지 않았을 때(오류 났을 때) 수행할 작업!
@@ -107,15 +111,33 @@ const editPostDB = (post_id, post) => {
 
 const deletePostDB = (post_id) => {
   return function (dispatch, getState, { history }) {
+    const headers = {
+      authorization: `Bearer ${sessionStorage.getItem("token")}`,
+    };
     axios
-      .delete(`http://3.36.119.207/api/animals/${post_id}`)
+      .delete(`http://3.36.119.207/api/animals/${post_id}`, {
+        headers: headers,
+      })
       .then((res) => {
         dispatch(deletePost(post_id));
-        history.push("/");
         console.log(res);
       })
       .catch((err) => {
         console.log("deletePost도중 에러 발생");
+      });
+  };
+};
+
+const likePostDB = (post_id) => {
+  return function (dispatch, getState, { history }) {
+    axios
+      .post(`http://3.36.119.207/api/animalLike/${post_id}`)
+      .then((res) => {
+        dispatch(likePost(res.data));
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log("like update 실패", err);
       });
   };
 };
@@ -143,17 +165,15 @@ export default handleActions(
       produce(state, (draft) => {
         draft.post = action.payload.post;
       }),
-    [DELETE_POST]: (state, action) => {
+    [DELETE_POST]: (state, action) =>
       produce(state, (draft) => {
-        let idx = draft.list.findIndex((p) => p.id === action.payload.post_id);
-        console.log(idx);
-
-        if (idx !== -1) {
-          // 배열에서 idx 위치의 요소 1개를 지웁니다.
-          draft.list.splice(idx, 1);
-        }
-      });
-    },
+        const { post_id } = action.payload;
+        draft.list = draft.list.filter((post) => post.animalId !== post_id);
+      }),
+    [LIKE_POST]: (state, action) =>
+      produce(state, (draft) => {
+        draft.post = action.payload.post;
+      }),
   },
   initialState
 );
@@ -169,6 +189,8 @@ const actionCreators = {
   detailPostDB,
   deletePost,
   deletePostDB,
+  likePost,
+  likePostDB,
 };
 
 export { actionCreators };
