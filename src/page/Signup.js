@@ -4,8 +4,8 @@ import { Text, Input, Grid, Button } from "../elements";
 import { history } from "../redux/configureStore";
 import Login from "./Login";
 import Header from "../components/Header";
-import logo from "../logo.png";
 
+import logo from "../logo.png";
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
 

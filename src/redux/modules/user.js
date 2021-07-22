@@ -105,6 +105,7 @@ const signupDB = (nickname, password, name) => {
       })
       .catch((error) => {
         console.log(error);
+        console.dir(error);
         window.alert("회원가입 실패!");
       });
   };
