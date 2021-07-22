@@ -13,7 +13,7 @@ const LIKE_POST = "LIKE_POST";
 //Action creators
 const setPost = createAction(SET_POST, (post_list) => ({ post_list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
-const detailPost = createAction(DETAIL_POST, (post) => ({ post }));
+const detailPost = createAction(DETAIL_POST, (post, name) => ({ post, name }));
 const editPost = createAction(EDIT_POST, (post_id, post) => ({
   post_id,
   post,
@@ -23,6 +23,7 @@ const likePost = createAction(LIKE_POST, (post_id) => ({ post_id }));
 
 // 게시글 하나에 기본적으로 들어갈 내용
 const initialPost = {
+  nickname: "initial nickname",
   title: "initial title",
   like: 10,
   animalName: "initial animalName",
@@ -60,7 +61,7 @@ const detailPostDB = (animalID) => {
     axios
       .get(`http://3.36.119.207/api/animals/${animalID}`)
       .then((res) => {
-        dispatch(detailPost(res.data.result));
+        dispatch(detailPost(res.data.result, res.data.name));
         console.log("detailPostDB", res);
       })
       .catch((err) => {
@@ -162,6 +163,10 @@ export default handleActions(
       produce(state, (draft) => {
         // console.log(action.payload.post)
         draft.post = action.payload.post;
+        draft.name = action.payload.name;
+
+        console.log(action.payload);
+        console.log(draft.name);
       }),
     [EDIT_POST]: (state, action) =>
       produce(state, (draft) => {

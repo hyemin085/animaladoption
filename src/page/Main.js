@@ -8,10 +8,10 @@ import { Pagination } from "semantic-ui-react";
 import Header from "../components/Header";
 import Card from "../components/Card";
 import notice from "../notice.png";
+import logo from "../logo.png";
 
 import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
-import logo from "../logo.png";
 
 const Main = (props) => {
   const dispatch = useDispatch();

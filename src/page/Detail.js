@@ -14,6 +14,7 @@ const Detail = (props) => {
   const dispatch = useDispatch();
 
   const post = useSelector((state) => state.post.post);
+  const name = useSelector((state) => state.post.name);
   const post_id = props.history.location.pathname.split("/detail/")[1];
 
   const is_login = useSelector((state) => state.user.is_login);
@@ -36,6 +37,9 @@ const Detail = (props) => {
     props.history.push("/");
   };
 
+  const is_session = sessionStorage.getItem("token") ? true : false;
+  console.log(is_session);
+
   return (
     <>
       <Header />
@@ -53,7 +57,7 @@ const Detail = (props) => {
         </TitleBox>
 
         <h3>{post.title}</h3>
-        <div>post.nickname</div>
+        <div>{name}</div>
         <Line />
         <ContentBox>
           <PhotoBox style={{ backgroundImage: `url(${post.animalPhoto})` }} />

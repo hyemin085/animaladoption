@@ -1,10 +1,11 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import styled from "styled-components";
 import { Button, Grid, Input, Text } from "../elements";
 
 import logo from "../logo.png";
+import Upload from "../shared/Upload";
 
 const PostWrite = (props) => {
   const dispatch = useDispatch();
@@ -16,8 +17,14 @@ const PostWrite = (props) => {
   const animalAge = React.useRef();
   const animalStory = React.useRef();
 
+  const profile_url = useSelector((state) => state.image.profile_url);
+  console.log(profile_url);
+  const author = useSelector((state) => state.post.nickname);
+  console.log(author);
+
   const addPost = () => {
     let post = {
+      nickname: author,
       title: title.current.value,
       animalName: animalName.current.value,
       animalSpecies: animalSpecies.current.value,
@@ -25,11 +32,10 @@ const PostWrite = (props) => {
       animalGender: animalGender.current.value,
       animalAge: animalAge.current.value,
       animalStory: animalStory.current.value,
-      animalPhoto:
-        "https://elaineimages.s3.ap-northeast-2.amazonaws.com/KakaoTalk_20210702_191310693.jpg",
+      animalPhoto: profile_url,
     };
+
     dispatch(postActions.addPostDB(post));
-    console.log(post);
     props.history.push("/");
   };
   return (
@@ -45,7 +51,7 @@ const PostWrite = (props) => {
                 padding: "30px",
               }}
             >
-              입양신청 수정
+              입양신청
             </h2>
             <p style={{ marginLeft: "34px", fontSize: "1.2em" }}>
               "모든 생명은 보호받고 존중받을 권리가 있습니다"
@@ -59,10 +65,19 @@ const PostWrite = (props) => {
         <AddBox>
           <Line />
           <InputBox>
-            <Bigbox>이미지 프리뷰</Bigbox>
+            <div>
+              <img
+                src={
+                  profile_url === ""
+                    ? "http://via.placeholder.com/400x300"
+                    : profile_url
+                }
+                alt=""
+                style={{ width: "70%", height: "25vw" }}
+              />
+            </div>
             <br />
-            <label htmlFor="ex_file"></label>
-            <input type="file" id="ex_file" />
+            <Upload />
             <input placeholder="제목" ref={title} />
             <input placeholder="강아지이름" ref={animalName} />
             <input placeholder="종" ref={animalSpecies} />
