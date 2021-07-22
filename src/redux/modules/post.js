@@ -80,7 +80,7 @@ const addPostDB = (post) => {
             .then((res) => {
                 console.log(res);
                 dispatch(addPost(post));
-                history.replace("/");
+                window.location.reload();
             })
             .catch((err) => {
                 console.log("post 작성 실패", err);

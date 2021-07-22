@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 
+
 const Button = (props) => {
     const {text, _onClick, children, margin, width, padding} = props;
 
@@ -26,9 +27,11 @@ Button.defaultProps ={
 
 const BasicButton = styled.button`
  
-  width: 20%;
+  width: 150px;
+  min-width: 100px;
   height: 50px;
-  border-radius: 20px;
+  border-radius: 5px;
+  margin-left: 20px;
   background-color: #67BFB2;
   color: #ffffff;
   padding: ${(props) => props.padding};

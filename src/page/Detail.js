@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { Grid } from "../elements/index";
 import Header from "../components/Header";
-import commentList from "../components/CommentList"
+
 
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";

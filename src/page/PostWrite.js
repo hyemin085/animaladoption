@@ -6,6 +6,7 @@ import { Button, Grid, Input, Text,  } from "../elements";
 
 import logo from "../logo.png";
 import Upload from "../shared/Upload";
+import Header from "../components/Header";
 
 const PostWrite = (props) => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const PostWrite = (props) => {
   };
   return (
     <React.Fragment>
-      <img src={logo} alt="Logo" style={{ margin: "0px" }} />
+      <Header />
       <Grid padding="50px">
         <Container>
           <Title>
@@ -46,7 +47,7 @@ const PostWrite = (props) => {
                 padding: "30px",
               }}
             >
-              입양신청 수정
+              입양신청 하기
             </h2>
             <p style={{ marginLeft: "34px", fontSize: "1.2em" }}>
               "모든 생명은 보호받고 존중받을 권리가 있습니다"
@@ -62,14 +63,16 @@ const PostWrite = (props) => {
           <InputBox>
             <div><img src ={profile_url==="" ? "http://via.placeholder.com/400x300" : profile_url} style={{width: "70%", height: "25vw"}}/></div>
             <br />
+              <Smallbox>
            <Upload/>
-            <input placeholder="제목" ref={title} />
-            <input placeholder="강아지이름" ref={animalName} />
-            <input placeholder="종" ref={animalSpecies} />
-            <input placeholder="품종" ref={animalBreed} />
-            <input placeholder="성별" ref={animalGender} />
-            <input placeholder="나이" ref={animalAge} />
-            <textarea
+
+            <A placeholder="제목" ref={title} />
+            <A placeholder="강아지이름" ref={animalName} />
+            <A placeholder="종" ref={animalSpecies} />
+            <A placeholder="품종" ref={animalBreed} />
+            <A placeholder="성별" ref={animalGender} />
+            <A placeholder="나이" ref={animalAge} />
+            <Textcomment
               label="게시글 내용"
               placeholder="게시글 작성"
               ref={animalStory}
@@ -77,6 +80,7 @@ const PostWrite = (props) => {
             <Grid padding="20px 0px">
               <Button text="게시글 작성" _onClick={addPost} />
             </Grid>
+              </Smallbox>
           </InputBox>
         </AddBox>
       </Grid>
@@ -84,12 +88,7 @@ const PostWrite = (props) => {
   );
 };
 
-const Bigbox = styled.div`
-  width: 70%;
-  height: 25vw;
-  background-color: antiquewhite;
-  margin: auto;
-`;
+
 
 const Container = styled.div`
   height: 15vw;
@@ -99,6 +98,14 @@ const Container = styled.div`
   color: white;
 `;
 
+const Smallbox = styled.div `
+border: 1px solid;
+  //text-align: center;
+  display: flex;
+  flex-direction: column;
+  border: none;
+  margin : auto;
+`;
 const Title = styled.div`
   font-size: 1em;
   color: #ffffff;
@@ -116,6 +123,7 @@ const InputBox = styled.div`
   text-align: center;
   display: flex;
   flex-direction: column;
+  border: 1px solid black;
 `;
 
 const Line = styled.div`
@@ -125,5 +133,23 @@ const Line = styled.div`
   background-color: #67bfb2;
   margin-bottom: 3vw;
 `;
+
+const A = styled.input`
+  border: 1px solid #212121;
+  width: 30vw;
+  padding : 12px 4px;
+  box-sizing: border-box;
+  margin: 0.3vw;
+`
+
+const Textcomment = styled.textarea`
+  border: 1px solid #212121;
+  width: 30vw;
+  height: 15vw;
+  padding : 12px 4px;
+  box-sizing: border-box;
+  margin: 0.3vw;
+  
+`
 
 export default PostWrite;

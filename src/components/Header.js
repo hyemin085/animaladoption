@@ -4,8 +4,7 @@ import { Grid, Text, Button } from "../elements";
 import logo from "../logo.png";
 
 import { actionCreators as useActions } from "../redux/modules/user";
-
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { history } from "../redux/configureStore";
 
 const Header = (props) => {
@@ -14,118 +13,123 @@ const Header = (props) => {
     console.log(is_session);
 
     if (is_session) {
-        return (
-            <React.Fragment>
-                <Grid is_flex padding="4px 16px">
-                    <Grid>
-                        <Text margin="0px" size="24px" bold>
-                            <BigMenu>
-                                <Menu style={{ marginLeft: "-30px", border: "none" }}>
+      return (
+          <React.Fragment>
+          <Container1>
+              <Grid padding="2vh 0.8vw" height="90%">
+                  <Grid is_flex padding="4px 60px">
+                      <Grid>
+                          <Text margin="0px" size="24px" bold>
+                              <Menu style={{ border: "1px" }}>
+                                  <img
+                                      src={logo}
+                                      alt="Logo"
+                                      style={{
+                                          width: "110%",
+                                          height: "110%",
+                                      }}
+                                      onClick={() => {
+                                          history.push("/");
+                                      }}
+                                  />
+                              </Menu>
+                              {/*<a href="#about">*/}
+                              <Menubar style={{marginLeft: "5em"}}>소개</Menubar>
+                              <Menubar>활동</Menubar>
+                              <Menubar>참여</Menubar>
+                              <Menubar>자료</Menubar>
+                              <Menubar>후원</Menubar>
+                              <Menubar style={{ marginRight: "5em" }}>온센터</Menubar>
+                              <Menubar style={{ border: "none", margin: "1em 3em 0 0" }}>
+                                  <OnButton
+                                      onClick={() => {
+                                          history.push("/write");
+                                      }} style = {{borderRight:"1px solid #FFFFFF"}}
+                                  >
+                                      포스팅하기
+                                  </OnButton>
+                                  <OnButton
+                                      onClick={() => {
+                                          dispatch(useActions.logOutDB());
+                                      }}
+                                      style={{ marginTop: "-20px" }}
+                                  >
+                                      로그아웃
+                                  </OnButton>
+                              </Menubar>
+                          </Text>
+                      </Grid>
+                  </Grid>
+              </Grid>
+          </Container1>
+        </React.Fragment>
+      );
+    }
+    return (
+        <>
+            <Container>
+                <Grid padding="2vh 0.8vw" height="90%">
+                    <Grid is_flex padding="4px 60px">
+                        <Grid>
+                            <Text margin="0px" size="24px" bold>
+                                <Menu style={{ border: "1px" }}>
                                     <img
                                         src={logo}
                                         alt="Logo"
                                         style={{
-                                            margin: "-20px",
-                                            width: "120%",
-                                            height: "120%",
+                                            width: "110%",
+                                            height: "110%",
                                         }}
-                                        onClick={"/"}
+                                        onClick={() => {
+                                            history.push("/");
+                                        }}
                                     />
                                 </Menu>
                                 {/*<a href="#about">*/}
-                                <Menu>소개</Menu>
-                                <Menu>활동</Menu>
-                                <Menu>참여</Menu>
-                                <Menu>자료</Menu>
-                                <Menu>후원</Menu>
-                                <Menu>온센터</Menu>
-                                <Menu style={{ border: "none" }}>
+                                <Menubar style={{marginLeft: "5em"}}>소개</Menubar>
+                                <Menubar>활동</Menubar>
+                                <Menubar>참여</Menubar>
+                                <Menubar>자료</Menubar>
+                                <Menubar>후원</Menubar>
+                                <Menubar style={{ marginRight: "5em" }}>온센터</Menubar>
+                                <Menubar style={{ border: "none", margin: "1em 3em 0 0" }}>
                                     <OnButton
+                                        style={{ borderRight: "1px solid #FFFFFF" }}
                                         onClick={() => {
-                                            history.push("/write");
-                                        }}
+                                            history.push("/signup");
+                                        }}  style = {{borderRight:"1px solid #FFFFFF"}}
                                     >
-                                        포스팅하기
+                                        회원가입
                                     </OnButton>
                                     <OnButton
                                         onClick={() => {
-                                            dispatch(useActions.logOutDB());
+                                            history.push("/login");
                                         }}
-                                        style={{ marginTop: "-20px" }}
                                     >
-                                        로그아웃
+                                        로그인
                                     </OnButton>
-                                </Menu>
-                            </BigMenu>
-                        </Text>
-
-                        <Line />
+                                </Menubar>
+                            </Text>
+                        </Grid>
                     </Grid>
                 </Grid>
-            </React.Fragment>
-        );
-    }
-    return (
-        <React.Fragment>
-            <Grid is_flex padding="4px 16px">
-                <Grid>
-                    <Text margin="0px" size="24px" bold>
-                        <BigMenu>
-                            <Menu style={{ marginLeft: "-30px", border: "none" }}>
-                                <img
-                                    src={logo}
-                                    alt="Logo"
-                                    style={{
-                                        margin: "-20px",
-                                        width: "110%",
-                                        height: "110%",
-                                    }}
-                                    onClick={() => {
-                                        history.push("/");
-                                    }}
-                                />
-                            </Menu>
-                            {/*<a href="#about">*/}
-                            <Menu>소개</Menu>
-                            <Menu>활동</Menu>
-                            <Menu>참여</Menu>
-                            <Menu>자료</Menu>
-                            <Menu>후원</Menu>
-                            <Menu style={{ marginRight: "5em" }}>온센터</Menu>
-                            <Menu style={{ border: "none", margin: "0 3em 0 0" }}>
-                                <OnButton
-                                    style={{ borderRight: "1px solid #FFFFFF" }}
-                                    onClick={() => {
-                                        history.push("/signup");
-                                    }}
-                                >
-                                    회원가입
-                                </OnButton>
-                                <OnButton
-                                    onClick={() => {
-                                        history.push("/login");
-                                    }}
-                                >
-                                    로그인
-                                </OnButton>
-                            </Menu>
-                        </BigMenu>
-                    </Text>
-
-                    <Line />
-                </Grid>
-            </Grid>
-        </React.Fragment>
+            </Container>
+        </>
     );
 };
 
-export default Header;
+const Container1 = styled.div`
+  width: 100vw;
+  height: 5%;
+  border-bottom: 1px solid #67bfb2;
+  
+`;
 
-const Line = styled.hr`
-  border: none;
-  border: 0.01em solid #699b97;
-  width: 100em;
-  margin: 5em 0em 0em -2em;
+const Container = styled.div`
+  width: 100vw;
+  height: 5%;
+  border-bottom: 1px solid #67bfb2;
+  //overflow: hidden;
 `;
 
 const OnButton = styled.button`
@@ -137,16 +141,26 @@ const OnButton = styled.button`
   font-size: 15px;
   font-weight: normal;
   cursor: pointer;
+  diplay: flex;
   &:hover {
     opacity: 0.8;
   }
 `;
-const BigMenu = styled.ul`
-  width: 230vh;
-  //border: 1px solid black;
-  height: 5vw;
+
+const Menubar = styled.li`
   float: left;
+  list-style: none;
+  padding-left: 0px
+  width: 30vh;
+  //margin-left: 4em;
+  margin : 1em 3em 0 0 ;
+  font-size: 0.8em;
+  font-weight: bold;
   color: black;
+  cursor: pointer;
+  &:hover {
+    border-bottom: 2.5px solid #67BFB2;
+  }
 `;
 const Menu = styled.li`
   float: left;
@@ -162,3 +176,5 @@ const Menu = styled.li`
     border-bottom: 3px solid #67BFB2;
   }
 `;
+
+export default Header;

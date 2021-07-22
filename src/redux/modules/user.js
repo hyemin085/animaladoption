@@ -88,10 +88,9 @@ const signupDB = (nickname, password, name) => {
             },
             data: {
                 nickname: nickname,
+                name: name,
                 password: password,
                 passwordConfirm : password,
-                name: name,
-
             }
         }).then((res)=>{
             console.log(res);
